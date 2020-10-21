@@ -447,9 +447,10 @@ Example:
 select str_to_map('test1&1-test2&2','-','&');
 -- The following result is returned:
 +------------+
-| a          |
+| _c0        |
 +------------+
-| {test1:1, test2:2} |
+| {"test2":"2","test1":"1"} |
++------------+
 ```
 
 ## EXPLODE
