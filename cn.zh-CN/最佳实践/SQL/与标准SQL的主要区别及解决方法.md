@@ -1,44 +1,43 @@
-# 与标准SQL的主要区别及解决方法 {#concept_tcb_h12_5db .concept}
+---
+keyword: [MaxCompute SQL, 标准SQL, 与标准SQL的区别]
+---
 
-本文将从习惯使用关系型数据库SQL用户的实践角度出发，列举用户在使用 MaxCompute SQL时比较容易遇见的问题。
+# 与标准SQL的主要区别及解决方法
 
-## MaxCompute SQL基本区别 {#section_zt4_pb2_5db .section}
+本文为您列举MaxCompute SQL与标准SQL的区别及常见问题解决方法。
+
+## MaxCompute SQL与标准SQL的基本区别
+
+|主要区别|问题现象|解决方法|
+|----|----|----|
+|应用场景|不支持事务（不支持Commit和Rollback，不推荐使用INSERT INTO）。|建议代码具备幂等性，支持重新执行。推荐您使用INSERT OVERWRITE写数据。|
+|不支持索引和主键约束。|无。|
+|部分字段不支持默认值或默认函数。|如果字段有默认值，您可以在数据写入时自行赋值。MaxCompute支持在创建表时，对BIGINT、DOUBLE、BOOLEAN和STRING类型的字段添加默认值。详情请参见[MaxCompute SQL新功能](/cn.zh-CN/新功能发布记录/公告.md).|
+|不支持自增字段。|无。|
+|表分区|单表最多支持6万个分区。超过6万个分区会报错。|选择合适的分区列，减少分区数。|
+|一次查询输入的分区不能超过1万个，否则会报错。如果是2级分区且查询时只根据2级分区进行过滤，总的分区数大于1万也可能导致报错。|解决方法请参见[在执行MaxCompute SQL过程中，报错输出表的分区过多，如何处理？](/cn.zh-CN/常见问题/SQL/SQL语句.md)。|
+|精度|DOUBLE类型存在精度问题。|不建议直接使用等于号（=）关联两个DOUBLE字段。建议将两个数相减，如果差距小于一个预设的值，则认为两个数是相同的。例如`ABS(a1-a2)<0.000000001`。|
+|虽然MaxCompute支持高精度类型DECIMAL，但是有更高精度的要求。|如果有更高的精度要求，您可以先把数据存储为STRING类型，然后使用UDF实现对应的计算。|
+|数据类型转换|出现各种预期外的错误，代码维护问题。|如果有2个不同的字段类型需要执行JOIN操作，建议您先转换字段类型再执行JOIN操作。|
+|日期类型和字符串的隐式转换。|如果在需要传入日期类型的函数中传入一个字符串，字符串和日期类型根据`yyyy-mm-dd hh:mi:ss`格式进行转换。|
+
+## DDL与DML的区别及解决方法
 
 |主要区别|问题现象|解决办法|
 |----|----|----|
-|应用场景|不支持事务（没有 commit 和 rollback，不推荐使用 Insert Into）|建议代码具有等幂性支持重跑，推荐 Insert Overwrite 写入数据。|
-|不支持索引和主外键约束|-|
-|不支持自增字段和默认值|如果有默认值，请在数据写入时自行赋值。|
-|表分区|单表支持 6 万个分区|-|
-|一次查询输入的分区不能超过1万，否则执行会报错；另外如果是 2 级分区且查询时只根据 2 级分区进行过滤，总的分区数大于 1 万也可能导致报错|[一次查询输入的分区数不能大于 1 万](https://www.alibabacloud.com/help/zh/faq-detail/43152.htm)|
-|[一次查询输出的分区数不能大于2048](https://www.alibabacloud.com/help/zh/faq-detail/44226.htm)|
-|精度|DOUBLE类型存在精度问题|不建议在关联时候进行直接等号关联两个DOUBLE字段，推荐的做法是把两个数做减法，如果差距小于一个预设的值就认为是相同，比如 abs\(a1- a2\) < 0.000000001。|
-|目前产品上已经支持高精度的类型DECIMAL|如果有更高精度要求的，可以先把数据存为 STRING类型，然后使用 UDF来实现对应的计算。|
-|数据类型转换|各种预期外的错误，代码维护问题。|如果有2个不同的字段类型需要做Join，建议您先把类型转好后再Join。|
-|日期型和字符串的隐式转换|在需要传入日期型的函数里如果传入一个字符串，字符串和日期类型的转换根据yyyy-mm-dd hh:mi:ss格式进行转换。|
-|其他格式转换|[日期函数 \> TO\_DATE](http://kb.aliyun-inc.com/kb/48974)|
+|表结构|不能修改分区列列名，只能修改分区列对应的值。|解决方案请参见[分区和分区列的区别是什么？](/cn.zh-CN/常见问题/SQL/SQL语句.md)。|
+|支持增加列，但是不支持删除列及修改列的数据类型。|解决方案请参见[SQL常见问题](/cn.zh-CN/常见问题/SQL/SQL语句.md)。|
+|INSERT|MaxCompute SQL需要在INSET INTO或INSERT OVERWRITE后加关键字TABLE。|无。|
+|数据插入表的字段映射不是根据SELECT的别名执行，而是根据SELECT字段的顺序和表中字段的顺序执行映射。|无。|
+|UPDATE和DELETE|不支持UPDATE和DELETE语句。|解决方案请参见[如何删除MaxCompute表或分区中的数据？](/cn.zh-CN/常见问题/SQL/SQL语句.md)和[如何更新MaxCompute表或分区中的数据？](/cn.zh-CN/常见问题/SQL/SQL语句.md)。|
+|SELECT|MaxCompute SQL最多支持6张小表的MAPJOIN，并且连续JOIN的表不能超过16张。|解决方案请参见[在执行MaxCompute SQL过程中，报错输入表过多，如何处理？](/cn.zh-CN/常见问题/SQL/SQL语句.mdsection_may_waj_495)|
+|IN和NOT IN|IN、NOT IN、EXIST和NOT EXIST，后面的子查询数据量不能超过1000条。|解决方案请参见[如何使用NOT IN？](/cn.zh-CN/常见问题/SQL/SQL语句.mdsection_03v_q8c_l4j)。如果业务上已经保证子查询返回结果的唯一性，可以考虑去掉DISTINCT，从而提升查询性能。|
+|SQL返回10000条|MaxCompute限制了单独执行SELECT语句时返回的数据条数。|解决方案请参见[其他操作](http://kb.aliyun-inc.com/kb/27834)。|
+|需要查询的结果数据条数很多。|解决方案请参见[使用SQLTask执行SQL查询时，如果查询结果条数大于限制的1000条，该如何获取所有数据？](/cn.zh-CN/常见问题/SQL/SQL语句.mdsection_3ti_u89_t81)。|
+|MAPJOIN|JOIN不支持笛卡尔积。|JOIN必须要用ON关键字设置关联条件。如果有一些小表要作为广播表，需要使用MAPJOIN HINT。
 
-## DDL与DML的区别及解法 { .section}
-
-|主要区别|问题现象|解决办法|
-|----|----|----|
-|表结构|不能修改分区列列名，只能修改分区列对应的值。|[分区和分区列的区别](https://www.alibabacloud.com/help/zh/faq-detail/40278.htm)|
-|支持增加列，但是不支持删除列以及修改列的数据类型。|[SQL常见问题](https://www.alibabacloud.com/help/zh/faq-detail/40292.htm)|
-|INSERT|语法上最直观的区别是：Insert into/overwrite 后面有个关键字Table。|-|
-|数据插入表的字段映射不是根据Select的别名做的，而是根据Select的字段的顺序和表里的字段的顺序。|-|
-|UPDATE/DELETE|目前不支持Update/Delete语句。|[更新和删除数据](https://www.alibabacloud.com/help/zh/faq-detail/40275.htm)|
-|SELECT|[输入表的数量不能超过16张](https://www.alibabacloud.com/help/zh/faq-detail/44309.htm)|-|
-|一个非分组列同一个Group By Key中的数据有多条，不使用聚合函数的话就没办法展示|Group by查询中的Select字段，应是Group By的分组字段，或者需要使用聚合函数。|
-|子查询|子查询必须要有别名|建议查询不要带别名|
-|IN/NOT IN|In/Not In,Exist/Not Exist，后面的子查询数据量不能超过 1000 条|[如何使用Not In](https://www.alibabacloud.com/help/zh/faq-detail/40282.html)|
-|如果业务上已经保证了子查询返回结果的唯一性，可以考虑去掉Distinct，从而提升查询性能。|
-|SQL返回10000条|MaxCompute限制了单独执行Select语句时返回的数据条数|[其他操作](http://kb.aliyun-inc.com/kb/27834)|
-|需要查询的结果数据条数很多|[如何获取所有数据](https://www.alibabacloud.com/help/zh/faq-detail/40333.htm)|
-|MAPJOIN|Join不支持笛卡尔积|Join必须要用on设置关联条件|
-|如果有一些小表需要做广播表，需要用 Mapjoin Hint|
-|[如何解决Join报错](https://www.alibabacloud.com/help/zh/faq-detail/40268.htm)|
-|ORDER BY|Order By后面需要配合Limit n使用|如果希望做很大的数据量的排序，甚至需要做全表排序，可以把这个N设置的很大|
-|[MaxCompute 查询数据的排序](https://www.alibabacloud.com/help/zh/faq-detail/40302.htm)|
-|UNION ALL|参与UNION ALL运算的所有列的属性不同，抛异常|参与UNION ALL运算的所有列的数据类型、列个数、列名称必须完全一致|
-|UNION ALL查询外面需要再嵌套一层子查询|-|
+解决方案请参见[如何解决JOIN报错？](/cn.zh-CN/常见问题/SQL/SQL语句.md)。 |
+|ORDER BY|ORDER BY需要配合LIMIT N使用。|如果希望执行大数据量的排序任务，甚至是全表排序任务，可以增大N值。解决方案请参见[MaxCompute查询得到的数据是根据什么排序的？](/cn.zh-CN/常见问题/SQL/SQL语句.md)。|
+|UNION ALL|参与UNION ALL运算的所有表必须列数一致，否则会报错。|参与UNION ALL运算的所有列的数据类型、列个数和列名称必须完全一致。|
+|UNION ALL需要再嵌套一层子查询。|无。|
 
