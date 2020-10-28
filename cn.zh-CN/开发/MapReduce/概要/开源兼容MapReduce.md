@@ -1,31 +1,37 @@
-# 开源兼容MapReduce {#concept_yc2_cyf_vdb .concept}
+---
+keyword: 开源兼容MapReduce
+---
 
-本文为您介绍开源兼容MapReduce的应用背景，以及HadoopMR插件的基本使用方式。
+# 开源兼容MapReduce
 
-MaxCompute（原ODPS）有一套原生的MapReduce编程模型和接口，简单来说，这套接口的输入输出都是MaxCompute中的Table，处理的数据以Record为组织形式，它可以很好地描述Table中的数据处理过程。
+本文为您介绍开源兼容MapReduce的应用背景，以及Hadoop MapReduce插件的基本使用方式。
 
-但是与社区的Hadoop相比，二者的编程接口差异较大。Hadoop用户如果要将原来的Hadoop MR作业迁移到MaxCompute的MR中执行，需要重写MR的代码，使用MaxCompute的接口进行编译和调试，运行正常后再打成一个Jar包才能放到MaxCompute的平台来运行。这个过程十分繁琐，需要耗费很多的开发和测试人力。如果能够完全不改或者少量地修改原来的Hadoop MapReduce代码，便可在MaxCompute平台上运行，将会比较理想。
+## 产生背景
 
-现在MaxCompute平台提供了一个Hadoop MapReduce到MaxCompute MR的适配工具，已经在一定程度上实现了Hadoop MapReduce作业的二进制级别的兼容，即您可以在不改代码的情况下通过指定一些配置，便可将原来在Hadoop上运行的MapReduce Jar包拿过来直接运行在MaxCompute上。您可通过单击[此处](http://odps-repo.oss-cn-hangzhou.aliyuncs.com/openmr%2Fhadoop2openmr-1.0.jar)下载开发插件。目前该插件处于测试阶段，暂时还不能支持您自定义comparator和自定义key类型。
+MaxCompute有一套原生的MapReduce编程模型和接口，简单来说，这套接口的输入输出都是MaxCompute中的表，处理的数据以Record为组织形式，它可以很好地描述表中的数据处理过程。
 
-下文以WordCount程序为例，为您介绍HadoopMR插件的基本使用方式。
+但是与社区的Hadoop相比，二者的编程接口差异较大。Hadoop用户如果要将原来的Hadoop MapReduce作业迁移到MaxCompute的MapReduce中执行，需要重写MapReduce的代码，使用MaxCompute的接口进行编译和调试，运行正常后再打成一个Jar包，才能放到MaxCompute平台中运行。这个过程十分繁琐，需要耗费很多的开发和测试人力。如果能够完全不改或者少量地修改原来的Hadoop MapReduce代码，便可以在MaxCompute平台上运行，将会比较理想。
 
-**说明：** 
+现在MaxCompute平台提供了一个Hadoop MapReduce到MaxCompute MapReduce的适配工具，已经在一定程度上实现了Hadoop MapReduce作业的二进制级别的兼容，您可以在不改代码的情况下通过指定一些配置，便可将原来在Hadoop上运行的MapReduce Jar包直接运行在MaxCompute上。目前该工具处于测试阶段，暂时还不能支持自定义Comparator和自定义Key类型。
 
--   更多开源兼容性的介绍请参见[开源版本SDK兼容性](cn.zh-CN/开发/MapReduce/Java SDK/兼容版本SDK概述.md)。
+下文以WordCount程序为例，为您介绍HadoopMapReduce插件的基本使用方式。
+
+**说明：**
+
+-   更多开源兼容性的介绍请参见[开源版本SDK兼容性](/cn.zh-CN/开发/MapReduce/Java SDK/兼容版本SDK概述.md)。
 -   更多Hadoop MapReduce SDK的介绍请参见[MapReduce官方文档](http://hadoop.apache.org/docs/r1.0.4/cn/mapred_tutorial.html)。
 
-## 下载HadoopMR插件 {#section_cb2_l1g_vdb .section}
+## 下载HadoopMapReduce插件
 
-请单击[此处](http://odps-repo.oss-cn-hangzhou.aliyuncs.com/openmr%2Fhadoop2openmr-1.0.jar)下载插件，包名为openmr\_hadoop2openmr-1.0.jar。
+请下载[Hadoop MapReduce](http://odps-repo.oss-cn-hangzhou.aliyuncs.com/openmr%2Fhadoop2openmr-1.0.jar)，包名为openmr\_hadoop2openmr-1.0.jar。
 
-**说明：** 这个Jar包中已经包含hadoop-2.7.2版本的相关依赖，在作业的Jar包中请不要携带Hadoop的依赖，避免版本冲突。
+**说明：** 此Jar包中已经包含hadoop-2.7.2版本的相关依赖，在作业的Jar包中请不要携带Hadoop的依赖，避免版本冲突。
 
-## 准备Jar包 {#section_byf_p1g_vdb .section}
+## 准备WordCount的Jar包
 
 编译导出WordCount的Jar包（wordcount\_test.jar），WordCount程序的源码如下所示：
 
-``` {#codeblock_9g0_a5s_g9s}
+```
 package com.aliyun.odps.mapred.example.hadoop;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -83,36 +89,36 @@ public class WordCount {
 				
 ```
 
-## 准备测试数据 {#section_y1l_s1g_vdb .section}
+## 准备测试数据
 
-1.  创建输入表和输出表。
+1.  执行如下语句创建输入表wc\_in和输出表wc\_out。
 
-    ``` {#codeblock_6x7_rih_v4k}
+    ```
     create table if not exists wc_in(line string);
     create table if not exists wc_out(key string, cnt bigint);
     ```
 
-2.  通过Tunnel命令将数据导入输入表中。
+2.  通过Tunnel命令将示例数据导入输入表wc\_in中。
 
-    需要导入文本文件data.txt的数据内容如下：
+    需要导入文本文件data.txt的数据内容如下。
 
-    ``` {#codeblock_9lt_aa6_68c}
+    ```
     hello maxcompute
     hello mapreduce
     ```
 
     您可通过MaxCompute客户端的`Tunnel`命令将data.txt的数据导入wc\_in中，如下所示。
 
-    ``` {#codeblock_17b_ljx_xib}
+    ```
     tunnel upload data.txt wc_in;
     ```
 
 
-## 准备表与HDFS文件路径的映射关系配置 {#section_b22_1bg_vdb .section}
+## 准备表与HDFS文件路径的映射关系配置
 
-配置文件命名为：wordcount-table-res.conf
+在配置文件wordcount-table-res.conf中配置表与HDFS文件路径的映射关系。配置文件如下所示。
 
-``` {#codeblock_d63_069_tx9}
+```
 {
   "file:/foo": {
     "resolver": {
@@ -153,23 +159,23 @@ public class WordCount {
 
 配置项说明：
 
-整个配置是一个JSON文件，描述HDFS上的文件与MaxCompute上的表之间的映射关系，一般要配置输入和输出两部分，一个HDFS路径对应一个resolver配置，tableInfos配置以及matchMode配置。
+整个配置是一个JSON文件，描述HDFS上的文件与MaxCompute上的表之间的映射关系，一般要配置输入和输出两部分，一个HDFS路径对应一个resolver配置、tableInfos配置以及matchMode配置。
 
--   resolver：用于配置如何对待文件中的数据，目前有com.aliyun.odps.mapred.hadoop2openmr.resolver.TextFileResolver和com.aliyun.odps.mapred.hadoop2openmr.resolver.BinaryFileResolver两个内置的resolver可以选用。除了指定好resolver的名字，还需要为相应的resolver配置一些properties指导它正确的进行数据解析。
-    -   TextFileResolver：对于纯文本的数据，输入输出都会当成纯文本对待。当作为输入resolver配置时，需要配置的properties有：text.resolver.columns.combine.enable和text.resolver.seperator，当text.resolver.columns.combine.enable配置为true时，会把输入表的所有列按照text.resolver.seperator指定的分隔符组合成一个字符串作为输入。否则，会把输入表的前两列分别作为key，value。
-    -   BinaryFileResolver：可以处理二进制的数据，自动将数据转换为MaxCompute可以支持的数据类型，如：Bigint，Bool，Double等。当作为输出resolver配置时，需要配置的properties有binary.resolver.input.key.class和binary.resolver.input.value.class，分别代表中间结果的key和value类型。
--   tableInfos：您配置HDFS对应的MaxCompute表，目前只支持配置表的名字tblName，而partSpec和label请保持和示例一致。
+-   resolver：用于配置如何对待文件中的数据，目前有com.aliyun.odps.mapred.hadoop2openmr.resolver.TextFileResolver和com.aliyun.odps.mapred.hadoop2openmr.resolver.BinaryFileResolver两个内置的resolver可以选用。除了指定好resolver的名字，还需要为相应的resolver配置一些特性指导它正确的进行数据解析。
+    -   TextFileResolver：对于纯文本的数据，输入输出都会当成纯文本对待。当作为输入resolver配置时，需要配置的properties有text.resolver.columns.combine.enable和text.resolver.seperator。当text.resolver.columns.combine.enable配置为true时，会把输入表的所有列按照text.resolver.seperator指定的分隔符组合成一个字符串作为输入。否则，会把输入表的前两列分别作为key、value。
+    -   BinaryFileResolver：可以处理二进制的数据，自动将数据转换为MaxCompute可以支持的数据类型，如：Bigint、Bool、Double等。当作为输出resolver配置时，需要配置的特性有binary.resolver.input.key.class和binary.resolver.input.value.class，分别代表中间结果的key和value类型。
+-   tableInfos：HDFS对应的MaxCompute表，目前只支持配置表的名称tblName，而partSpec和label请保持和示例一致。
 -   matchMode：路径的匹配模式，可选项为exact和fuzzy，分别代表精确匹配和模糊匹配，如果设置为fuzzy，则可以通过正则来匹配HDFS的输入路径。
 
-## 作业提交 {#section_okw_gbg_vdb .section}
+## 作业提交
 
-使用MaxCompute命令行工具odpscmd提交作业。MaxCompute命令行工具的安装和配置方法请参见[客户端用户手册](../../../../cn.zh-CN/工具及下载/客户端.md#)。在odpscmd运行如下命令：
+在MaxCompute客户端运行如下命令提交作业。MaxCompute客户端安装和配置方法请参见[客户端](/cn.zh-CN/工具及下载/客户端.md)。
 
-``` {#codeblock_2lf_kr8_eys}
+```
 jar -DODPS_HADOOPMR_TABLE_RES_CONF=./wordcount-table-res.conf -classpath hadoop2openmr-1.0.jar,wordcount_test.jar com.aliyun.odps.mapred.example.hadoop.WordCount /foo/bar;
 ```
 
-**说明：** 
+**说明：**
 
 -   wordcount-table-res.conf是配置了/foo/bar的映射。
 -   wordcount\_test.jar包是您的Hadoop MapReduce的jar包。
@@ -180,9 +186,9 @@ jar -DODPS_HADOOPMR_TABLE_RES_CONF=./wordcount-table-res.conf -classpath hadoop2
 
 运行过程如下图所示：
 
-![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/12015/15597897251957_zh-CN.jpg)
+![](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/2092659951/p1957.jpg)
 
 当作业运行完成后，便可查看结果表wc\_out的内容，验证作业是否成功结束，结果是否符合预期。
 
-![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/12015/15597897251959_zh-CN.jpg)
+![](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/3092659951/p1959.jpg)
 
