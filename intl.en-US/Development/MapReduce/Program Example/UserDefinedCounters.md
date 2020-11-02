@@ -155,7 +155,7 @@ public class UserDefinedCounters {
         InputUtils.addTable(TableInfo.builder().tableName(args[0]).build(), job);
         OutputUtils.addTable(TableInfo.builder().tableName(args[1]).build(), job);
         RunningJob rJob = JobClient.runJob(job);
-        // If the job is successful, the values of the user-defined counters in the job are returned.
+        /** If the job is successful, the values of the user-defined counters in the job are returned. */
         Counters counters = rJob.getCounters();
         long m = counters.findCounter(MyCounter.MAP_TASKS).getValue();
         long r = counters.findCounter(MyCounter.REDUCE_TASKS).getValue();
