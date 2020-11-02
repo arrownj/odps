@@ -42,11 +42,11 @@ import com.aliyun.odps.mapred.conf.JobConf;
 public class Sleep {
   private static final String SLEEP_SECS = "sleep.secs";
   public static class MapperClass extends MapperBase {
-    // No data is not entered, the map function is not executed, and the related logic can be written only into setup.
+    /** No data is not entered, the map function is not executed, and the related logic can be written only into setup. */
     @Override
     public void setup(TaskContext context) throws IOException {
       try {
-        // Obtain the number of sleep seconds set in jobconf.
+        /** Obtain the number of sleep seconds set in jobconf. */
         Thread.sleep(context.getJobConf().getInt(SLEEP_SECS, 1) * 1000);
       } catch (InterruptedException e) {
         throw new RuntimeException(e);
@@ -60,9 +60,9 @@ public class Sleep {
     }
     JobConf job = new JobConf();
     job.setMapperClass(MapperClass.class);
-    // This instance is also a MapOnly job and the number of reducers must be set to 0.
+    /** This instance is also a MapOnly job and the number of reducers must be set to 0. */
     job.setNumReduceTasks(0);
-    // The number of mappers must be specified by the user because there is no input table.
+    /** The number of mappers must be specified by the user because there is no input table. */
     job.setNumMapTasks(1);
     job.set(SLEEP_SECS, args[0]);
     JobClient.runJob(job);
