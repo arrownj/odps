@@ -1,51 +1,55 @@
-# WordCount示例 {#concept_rtv_dhg_vdb .concept}
+---
+keyword: WordCount示例
+---
+
+# WordCount示例
 
 本文为您介绍MapReduce WordCount示例程序。
 
-## 测试准备 {#section_bjk_nxg_vdb .section}
+## 测试准备
 
-1.  准备好测试程序的Jar包，假设名字为mapreduce-examples.jar，本地存放路径为data\\resources。
+1.  准备好测试程序的JAR包，假设名字为mapreduce-examples.jar，本地存放路径为data\\resources。
     1.  创建测试表。
 
-        ``` {#codeblock_pgc_1yc_ewm}
+        ```
         create table wc_in (key string, value string);
         create table wc_out(key string, cnt bigint);
         ```
 
     2.  添加测试资源。
 
-        ``` {#codeblock_9ay_sxh_6px}
+        ```
         add jar data\resources\mapreduce-examples.jar -f;
         ```
 
 2.  准备好WordCount测试表和资源。
 3.  使用Tunnel导入数据。
 
-    ``` {#codeblock_jpe_2ug_h4c}
+    ```
     tunnel upload data wc_in;
     ```
 
-    导入wc\_in表的数据文件data的内容。
+    导入wc\_in表的数据如下。
 
-    ``` {#codeblock_iax_upm_481}
+    ```
     hello,odps
     ```
 
 
-## 测试步骤 {#section_bhf_1yg_vdb .section}
+## 测试步骤
 
 在MaxCompute客户端中执行WordCount。
 
-``` {#codeblock_tim_vk3_8h1}
+```
 jar -resources mapreduce-examples.jar -classpath data\resources\mapreduce-examples.jar
 com.aliyun.odps.mapred.open.example.WordCount wc_in wc_out
 ```
 
-## 预期结果 {#section_nvs_dyg_vdb .section}
+## 预期结果
 
-作业成功结束后，输出表wc\_out中的内容。
+作业成功结束后，输出表wc\_out中的内容如下。
 
-``` {#codeblock_y51_8vg_ap7}
+```
 +------------+------------+
 | key        | cnt        |
 +------------+------------+
@@ -54,9 +58,9 @@ com.aliyun.odps.mapred.open.example.WordCount wc_in wc_out
 +------------+------------+
 ```
 
-## 代码示例 {#section_ykc_gyg_vdb .section}
+## 代码示例
 
-``` {#codeblock_pvj_h5f_98c}
+```
 package com.aliyun.odps.mapred.open.example;
 import java.io.IOException;
 import java.util.Iterator;
@@ -98,7 +102,7 @@ public class WordCount {
             public void setup(TaskContext context) throws IOException {
             count = context.createMapOutputValueRecord();
         }
-        //combiner实现的接口和reducer一样，可以立即在mapper本地执行的一个reduce，作用是减少mapper的输出量。
+        /**Combiner实现的接口和Reducer一样，是可以立即在Mapper本地执行的一个Reduce，作用是减少Mapper的输出量。*/
         @Override
             public void reduce(Record key, Iterator<Record> values, TaskContext context)
             throws IOException {
@@ -142,10 +146,10 @@ public class WordCount {
         job.setMapperClass(TokenizerMapper.class);
         job.setCombinerClass(SumCombiner.class);
         job.setReducerClass(SumReducer.class);
-        //设置mapper中间结果的key和value的schema, mapper的中间结果输出也是record的形式。
+        /**设置Mapper中间结果的key和value的Schema, Mapper的中间结果输出也是Record的形式。*/
         job.setMapOutputKeySchema(SchemaUtils.fromString("word:string"));
         job.setMapOutputValueSchema(SchemaUtils.fromString("count:bigint"));
-        //设置输入和输出的表信息。
+        /**设置输入和输出的表信息。*/
         InputUtils.addTable(TableInfo.builder().tableName(args[0]).build(), job);
         OutputUtils.addTable(TableInfo.builder().tableName(args[1]).build(), job);
         JobClient.runJob(job);
