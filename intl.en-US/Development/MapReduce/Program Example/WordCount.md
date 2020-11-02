@@ -102,7 +102,7 @@ public class WordCount {
             public void setup(TaskContext context) throws IOException {
             count = context.createMapOutputValueRecord();
         }
-        // The combiner implements the same interface as that of the reducer. The combiner allows you to immediately run a local reduce job on the mapper to reduce the output of the mapper.
+        /** The combiner implements the same interface as that of the reducer. The combiner allows you to immediately run a local reduce job on the mapper to reduce the output of the mapper. */
         @Override
             public void reduce(Record key, Iterator<Record> values, TaskContext context)
             throws IOException {
@@ -146,10 +146,10 @@ public class WordCount {
         job.setMapperClass(TokenizerMapper.class);
         job.setCombinerClass(SumCombiner.class);
         job.setReducerClass(SumReducer.class);
-        // Configure the schema that defines the intermediate output of the mapper as key-value pairs. The intermediate output of the mapper exists as records.
+        /** Configure the schema that defines the intermediate output of the mapper as key-value pairs. The intermediate output of the mapper exists as records. */
         job.setMapOutputKeySchema(SchemaUtils.fromString("word:string"));
         job.setMapOutputValueSchema(SchemaUtils.fromString("count:bigint"));
-        // Configure information about input and output tables.
+        /** Configure information about input and output tables. */
         InputUtils.addTable(TableInfo.builder().tableName(args[0]).build(), job);
         OutputUtils.addTable(TableInfo.builder().tableName(args[1]).build(), job);
         JobClient.runJob(job);
