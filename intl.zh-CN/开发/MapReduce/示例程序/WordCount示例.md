@@ -102,7 +102,7 @@ public class WordCount {
             public void setup(TaskContext context) throws IOException {
             count = context.createMapOutputValueRecord();
         }
-        //Combiner实现的接口和Reducer一样，是可以立即在Mapper本地执行的一个Reduce，作用是减少Mapper的输出量。
+        /**Combiner实现的接口和Reducer一样，是可以立即在Mapper本地执行的一个Reduce，作用是减少Mapper的输出量。*/
         @Override
             public void reduce(Record key, Iterator<Record> values, TaskContext context)
             throws IOException {
@@ -146,10 +146,10 @@ public class WordCount {
         job.setMapperClass(TokenizerMapper.class);
         job.setCombinerClass(SumCombiner.class);
         job.setReducerClass(SumReducer.class);
-        //设置Mapper中间结果的key和value的Schema, Mapper的中间结果输出也是Record的形式。
+        /**设置Mapper中间结果的key和value的Schema, Mapper的中间结果输出也是Record的形式。*/
         job.setMapOutputKeySchema(SchemaUtils.fromString("word:string"));
         job.setMapOutputValueSchema(SchemaUtils.fromString("count:bigint"));
-        //设置输入和输出的表信息。
+        /**设置输入和输出的表信息。*/
         InputUtils.addTable(TableInfo.builder().tableName(args[0]).build(), job);
         OutputUtils.addTable(TableInfo.builder().tableName(args[1]).build(), job);
         JobClient.runJob(job);
