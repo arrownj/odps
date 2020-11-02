@@ -1,29 +1,29 @@
+---
+keyword: activate MaxCompute
+---
+
 # Activate MaxCompute
 
-If you are using DTplus products and DataWorks for the first time, you must log on to the console by using your Alibaba Cloud account. If you need to log on to the console and create projects as a RAM user, you must ensure that the RAM user has been granted the required permissions according to [Create an Alibaba Cloud account](/intl.en-US/Prepare/Create an Alibaba Cloud account.md). To activate MaxCompute, follow these steps:
+After you prepare the required account, you must activate MaxCompute before you can use MaxCompute. This topic describes how to activate MaxCompute.
 
-1.  Log on to the [Alibaba Cloud website](https://www.alibabacloud.com/zh) by using your Alibaba Cloud account.
+-   When you use MaxCompute for the first time, we recommend that you activate MaxCompute by using your Alibaba Cloud account.
+-   If you want to log on to the official Alibaba Cloud website and create a MaxCompute project by using a RAM user, make sure that your RAM user is valid and has been granted the required permissions. For more information, see [Create RAM users](/intl.en-US/Prepare/Create RAM users.md). You can activate MaxCompute when these conditions are met.
 
-2.  Go to the home page of [MaxCompute](https://www.alibabacloud.com/product/maxcompute) and click **Buy Now**.
+1.  Log on to the [official Alibaba Cloud website](https://www.alibabacloud.com/zh).
 
-3.  Select a payment method, and click **Buy Now**.
+2.  Go to the [product page of Alibaba Cloud MaxCompute](https://www.alibabacloud.com/product/maxcompute) and click **Buy Now**.
 
-    ![](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/5642659951/p1383.png)
+3.  Select a billing method and click **Buy Now**.
 
-    MaxCompute provides two payment options: Subscription and Pay-As-You-Go. You can select a method as needed. For more information, see [Computing pricing](/intl.en-US/Pricing/Computing pricing.md).
+    ![Buy page](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/2548711061/p50813.jpg)
 
-    You can select a region according to your current setup. We recommend that you take into consideration the regions of related Alibaba Cloud products \(such as ECS\) and your actual data.
+    -   MaxCompute supports both the subscription and pay-as-you-go billing methods. Select a billing method based on your business requirements. For more information, see [Computing pricing](/intl.en-US/Pricing/Computing pricing.md).
+    -   When you select a region, you must consider the regions where other related Alibaba Cloud services reside. For example, you can select the region where your ECS instances are deployed or your data is stored.
+4.  Confirm the order details and click **Activate Now**.
 
-4.  Confirm the order details and click **Activate**.
+    ![Pay](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/2548711061/p50814.jpg)
 
-    ![](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/5642659951/p1379.png)
 
-    The following page is displayed, indicating that MaxCompute is activated.
-
-    ![](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/5642659951/p1382.png)
-
-    After, you can create MaxCompute projects as needed. For more information, see [Create a project](/intl.en-US/Prepare/Create a project.md).
-
-    **Note:** MaxCompute and DataWorks shares the same console. You must [activate DataWorks](https://www.alibabacloud.com/product/ide?spm=a3c0i.7911826.1097638.dnavproductsh3.3a5214b3O5YhZp) before you create a MaxCompute project.
-
+1.  Activate [DataWorks](https://common-buy-intl.alibabacloud.com/?commodityCode=dide_create_post_intl#/buy). The MaxCompute console is integrated into the DataWorks console. Before you create a MaxCompute project, you must activate DataWorks and make sure that the region where you activate DataWorks in the same region as MaxCompute.
+2.  Create a project in the DataWorks console. For more information, see [Create a project](/intl.en-US/Prepare/Create a project.md).
 
