@@ -155,7 +155,7 @@ public class UserDefinedCounters {
         InputUtils.addTable(TableInfo.builder().tableName(args[0]).build(), job);
         OutputUtils.addTable(TableInfo.builder().tableName(args[1]).build(), job);
         RunningJob rJob = JobClient.runJob(job);
-        //在作业成功结束后，可以获取到Job里面的自定义Counter的值。
+        /**在作业成功结束后，可以获取到Job里面的自定义Counter的值。*/
         Counters counters = rJob.getCounters();
         long m = counters.findCounter(MyCounter.MAP_TASKS).getValue();
         long r = counters.findCounter(MyCounter.REDUCE_TASKS).getValue();
