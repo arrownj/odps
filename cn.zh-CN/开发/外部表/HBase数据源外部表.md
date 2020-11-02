@@ -6,7 +6,7 @@ keyword: [加载数据至HBase, HTable.put, bulkload]
 
 如果您需要通过MaxCompute将数据加载至HBase的表中，可以基于HBase提供的HTable.put在线接口或bulkload实现。本文为您介绍如何通过HTable.put在线接口或bulkload将数据加载至HBase的表中。
 
--   执行本文操作前，您需要先开通MaxCompute和HBase间的网络连接，详情请参见[t1964315.md\#]()。
+-   执行本文操作前，您需要先开通MaxCompute和HBase间的网络连接，详情请参见[网络开通流程](/cn.zh-CN/开发/外部表/网络开通流程.md)。
 -   HBase中的表需要提前通过HBase客户端创建好。详情请参见[Hive读写HBase指南]()或[使用HBase Shell](https://help.aliyun.com/document_detail/164447.html)。
 -   如果您通过bulkload方式将数据加载至HBase的表中，需要打开HBase的HDFS（Hadoop Distributed File System）端口，详情请参见[访问HBase HDFS]()。
 
