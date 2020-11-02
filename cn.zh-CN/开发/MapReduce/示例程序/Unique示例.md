@@ -1,33 +1,37 @@
-# Unique示例 {#concept_mzd_52l_vdb .concept}
+---
+keyword: Unique示例
+---
+
+# Unique示例
 
 本文为您介绍MapReduce的Unique示例。
 
-## 测试准备 {#section_e3n_syg_vdb .section}
+## 测试准备
 
-1.  准备好测试程序的Jar包，假设名字为mapreduce-examples.jar，本地存放路径为data\\resources。
+1.  准备好测试程序的JAR包，假设名字为mapreduce-examples.jar，本地存放路径为data\\resources。
 2.  准备好Unique的测试表和资源。
     1.  创建测试表。
 
-        ``` {#codeblock_0ez_iji_qnm}
+        ```
         create table ss_in(key bigint, value bigint);
         create table ss_out(key bigint, value bigint);
         ```
 
     2.  添加测试资源。
 
-        ``` {#codeblock_tkj_oex_m47}
+        ```
         add jar data\resources\mapreduce-examples.jar -f;
         ```
 
 3.  使用Tunnel导入数据。
 
-    ``` {#codeblock_z8m_tiw_i5t}
+    ```
     tunnel upload data ss_in;
     ```
 
-    导入ss\_in表的数据文件data的内容。
+    导入ss\_in表的数据文件data的内容如下。
 
-    ``` {#codeblock_wxj_xro_wg8}
+    ```
      1,1
      1,1
      2,2
@@ -35,20 +39,20 @@
     ```
 
 
-## 测试步骤 {#section_rlv_bzg_vdb .section}
+## 测试步骤
 
 在MaxCompute客户端中执行Unique。
 
-``` {#codeblock_wu9_9ya_9xl}
+```
 jar -resources mapreduce-examples.jar -classpath data\resources\mapreduce-examples.jar
 com.aliyun.odps.mapred.open.example.Unique ss_in ss_out key;
 ```
 
-## 预期结果 {#section_hzz_dzg_vdb .section}
+## 预期结果
 
 作业成功结束后，输出表ss\_out中的内容如下。
 
-``` {#codeblock_n8l_ac5_cwb}
+```
 +------------+------------+
 | key        | value      |
 +------------+------------+
@@ -57,9 +61,9 @@ com.aliyun.odps.mapred.open.example.Unique ss_in ss_out key;
 +------------+------------+
 ```
 
-## 代码示例 {#section_jgb_gzg_vdb .section}
+## 代码示例
 
-``` {#codeblock_37w_cbv_op5}
+```
 package com.aliyun.odps.mapred.open.example;
 import java.io.IOException;
 import java.util.Iterator;
@@ -128,8 +132,7 @@ public class Unique {
         if (args.length == 3) {
             ops = args[2];
         }
-        // reduce的输入分组是由setOutputGroupingColumns的设置来决定的，这个参数如果不设置。
-        // 默认就是MapOutputKeySchema。
+        /** Reduce的输入分组是由setOutputGroupingColumns的设置来决定的，这个参数如果不设置，默认就是MapOutputKeySchema。*/
         // Key Unique
         if (ops.equals("key")) {
             JobConf job = new JobConf();
