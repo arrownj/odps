@@ -1,44 +1,45 @@
-# \(Optional\) Use MapReduce {#concept_blb_kxd_vdb .concept}
+---
+keyword: MapReduce
+---
 
-This topic describes how to compile and run the MapReduce WordCount example program after you install the MaxCompute client.
+# \(Optional\) Use MapReduce
 
-**Note:** Maven users can search `odps-sdk-mapred` at [Maven library](https://search.maven.org/) to download the preferred Java SDK \(available in different versions\). The configuration information is as follows:
+This topic describes how to compile and run WordCount samples of MapReduce after you install the MaxCompute client.
 
-```
-<dependency>
-    <groupId>com.aliyun.odps</groupId>
-    <artifactId>odps-sdk-mapred</artifactId>
-    <version>0.26.2-public</version>
-</dependency>
-```
+## Prerequisites
 
-## Prerequisites {#section_ht1_byd_vdb .section}
+-   JDK 1.6 or a later version is installed.
 
--   JDK1.6 or a later version is installed.
--   The MaxCompute client is deployed by following the instructions provided in [Install and configure a client](../../../../../reseller.en-US/Prepare/Install and configure a client.md). For more information, see [Client](../../../../../reseller.en-US/Tools and Downloads/Client.md).
-
-## Procedure {#section_mcx_3yd_vdb .section}
-
-1.  After installing and configuring the client, open `odpscmd.bat` and enter the corresponding project space.
-2.  Run the following statements to create input and output tables:
+    **Note:** If you use Maven, you can search for odps-sdk-mapred in the [Maven repository](http://search.maven.org/) to obtain the latest version of the SDK for Java. You can configure the Maven dependency in the following way:
 
     ```
+    <dependency>
+        <groupId>com.aliyun.odps</groupId>
+        <artifactId>odps-sdk-mapred</artifactId>
+        <version>0.26.2-public</version>
+    </dependency>
+    ```
+
+-   The MaxCompute client is deployed. For more information, see [Install and configure the odpscmd client](/intl.en-US/Prepare/Install and configure the odpscmd client.md). For more information about how to use the MaxCompute client, see [MaxCompute client](/intl.en-US/Tools and Downloads/Client.md).
+
+## Procedure
+
+1.  Run ./bin/odpscmd in a Linux operating system or ./bin/odpscmd.bat in a Windows operating system to enter the required project.
+2.  Execute the following statements to create the input and output tables.
+
+    ```
+    --Create the input table wc_in.
     CREATE TABLE wc_in (key STRING, value STRING);
+    --Create the output table wc_out.
     CREATE TABLE wc_out (key STRING, cnt BIGINT);
-    -- Create input and output tables.
     ```
 
-    For more information about table creation statements, see [Table operations](../../../../../reseller.en-US/User Guide/Common commands/Table operations.md).
+    For more information about the statements used to create tables, see [Create a table](/intl.en-US/Development/Common commands/Table-level operations.md).
 
-3.  Upload data by using either of the following methods:
-    -   Use the Tunnel command, for example:
+3.  Use one of the following methods to insert data into the wc\_in table:
+    -   Run Tunnel commands to upload data.
 
-        ```
-        tunnel upload kv.txt wc_in
-        -- Upload example data.
-        ```
-
-        The data in the kv.txt file is as follows:
+        The following example shows the data that you want to insert into the table. You must create a kv.txt file on your machine and save the data to the file. Assume that the kv.txt file is saved in D:\\.
 
         ```
         238,val_238
@@ -46,36 +47,42 @@ This topic describes how to compile and run the MapReduce WordCount example prog
         186,val_86
         ```
 
-    -   Insert data by running an SQL statement, for example:
+        Run the following command to upload the data:
 
         ```
-        insert into table wc_in select '238',' val_238' from (select count(*) from wc_in) a;
+        Tunnel upload D:\kv.txt wc_in;
         ```
 
-4.  Compile the MapReduce program and upload it to the MaxCompute client.
+    -   Execute the following SQL statement to insert the data:
 
-    In this topic, Eclipse-based MapReduce program development is used as an example. MaxCompute provides the [Eclipse development plug-in](../../../../../reseller.en-US/Tools and Downloads/Eclipse Plugins/Install.md#) and local MapReduce debugging \(which you can use alongside [MaxCompute Studio](../../../../../reseller.en-US/Tools and Downloads/MaxCompute Studio/Developing Java/Create MaxCompute Java Module.md#)\). These methods can help you to quickly develop MapReduce programs.
+        ```
+        INSERT INTO TABLE wc_in VALUES ('238',' val_238'),('186','val_86'),('186','val_86');
+        ```
 
-    You must create a MaxCompute project in Eclipse first, and then compile the MapReduce program \(a .jar package, for example, [Word-count-1.0.jar](../../../../../reseller.en-US/User Guide/MapReduce/Program Example/WordCount samples.md)\). After the local debugging is performed successfully, upload the compiled program to MaxCompute.  For more information, see [Install](../../../../../reseller.en-US/Tools and Downloads/Eclipse Plugins/Install.md).
+4.  Compile a MapReduce program and upload it to MaxCompute.
 
-5.  Add the .jar package to the project by running the following command:
+    Create a project in Eclipse or MaxCompute Studio and compile the MapReduce program in the project. After local debugging succeeds, export the JAR package of the compiled program, such as Word-count-1.0.jar, and upload it to MaxCompute.
 
-    ```
-    add jar word-count-1.0.jar;
-    ```
+    **Note:** In this topic, you can use the Word-count-1.0.jar package generated based on the sample code in [WordCount samples](/intl.en-US/Development/MapReduce/Program Example/WordCount.md).
 
-6.  In the MaxCompute client, run the following command:
-
-    ```
-    jar -resources word-count-1.0.jar -classpath /home/resources/word-count-1.0.jar com.taobao.jingfan.WordCount wc_in wc_out;
-    ```
-
-7.  In the MaxCompute client, check the results by running the following command:
+5.  Add the JAR package as a project resource on the MaxCompute client. In this example, the JAR package is named Word-count-1.0.jar.
 
     ```
-    select * from wc_out;
+    ADD JAR word-count-1.0.jar;
     ```
 
-    **Note:** If any resource is used in a Java program, you must add the resource to the -resources parameter. For more information about JAR commands, see [Commands](../../../../../reseller.en-US/User Guide/MapReduce/Function Introduction/Commands.md).
+6.  Run the JAR command on the MaxCompute client.
+
+    ```
+    Jar -resources word-count-1.0.jar -classpath /home/resources/word-count-1.0.jar com.taobao.jingfan.WordCount wc_in wc_out;
+    ```
+
+    **Note:** If the Java program uses resources, use the -resources option to specify the resources. For more information about the JAR command, see [Submit a job](/intl.en-US/Development/MapReduce/Function Introduction/Job submission.md).
+
+7.  View the command output on the MaxCompute client.
+
+    ```
+    SELECT * FROM wc_out;
+    ```
 
 
