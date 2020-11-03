@@ -1,15 +1,17 @@
-# Migrate JSON data from OSS to MaxCompute {#concept_gyw_dhd_5fb .concept}
+---
+keyword: migrate data from OSS to MaxCompute
+---
 
-This topic describes how to use the data integration feature of DataWorks to migrate JSON data from OSS to MaxCompute and use the built-in string function GET\_JSON\_OBJECT of MaxCompute to extract JSON information.
+# Migrate JSON data from OSS to MaxCompute
 
-## Preparations {#section_fmj_3hd_5fb .section}
+This topic describes how to use the data integration feature of DataWorks to migrate JSON data from Object Storage Service \(OSS\) to MaxCompute and use the GET\_JSON\_OBJECT function to extract JSON objects.
 
--   Upload data to OSS.
-
-    Convert your JSON file to a TXT file and upload it to OSS. The following is a JSON file example:
+-   [MaxCompute is activated](/intl.en-US/Prepare/Activate MaxCompute.md).
+-   [DataWorks is activated](https://common-buy.aliyun.com/).
+-   A workflow is created in the DataWorks console. In this example, a workflow is created in a DataWorks workspace in basic mode. For more information, see [Create a workflow]().
+-   A TXT file that contains JSON data is uploaded to an OSS bucket. In this example, the OSS bucket is in the China \(Shanghai\) region. The TXT file contains the following JSON data:
 
     ```
-    
     {
         "store": {
             "book": [
@@ -42,137 +44,130 @@ This topic describes how to use the data integration feature of DataWorks to mig
     }
     ```
 
-    Upload the applog.txt file to OSS. In this example, the OSS bucket is located in China \(Shanghai\).
 
+## Migrate JSON data from OSS to MaxCompute
 
-## Use DataWorks to migrate JSON data from OSS to MaxCompute {#section_zcj_s3d_5fb .section}
+1.  Add an OSS connection. For more information, see [t1695549.md\#]().
 
--   **1. Add an OSS data source.**
+2.  Create a table in DataWorks to store the JSON data to be migrated from OSS.
 
-    In the DataWorks console, go to the [Data Integration](../../../../../reseller.en-US/User Guide/Data integration/Data integration introduction/Data integration overview.md#) page and add an OSS data source. For more information, see [Configure OSS data source](../../../../../reseller.en-US/User Guide/Data integration/Data source configuration/Configure OSS data source.md#).
+    1.  Login [DataWorks console](https://workbench.data.aliyun.com/console).
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/62284/155117497731532_en-US.png)
+    2.  In **create a table** page, select the engine type, and enter **table name**.
 
-    The parameters are shown in the following figure. Click **Complete** after the connectivity test is successful. The endpoints in this topic include http://oss-cn-shanghai.aliyuncs.com and http://oss-cn-shanghai-internal.aliyuncs.com.
+    3.  On the table editing page, click **DDL Statement**.
 
-    **Note:** Because the OSS and DataWorks projects are located in the same region, the intranet endpoint `http://oss-cn-shanghai-internal.aliyuncs.com` is used.
+    4.  In the DDL Statement dialog box, enter the following statement and click **Generate Table Schema**:
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/62284/155117497731536_en-US.png)
+        ```
+        create table mqdata (mq_data string);
+        ```
 
--   **2. Create a data synchronization task.**
+    5.  Click **Submit to Production Environment**.
 
-    In the DataWorks console, create a data synchronization node. For more information, see [Configure OSS Reader](../../../../../reseller.en-US/User Guide/Data integration/Task configuration/Configure reader plug-in/Configure OSS Reader.md#). At the same time, create a table named mqdata in DataWorks to store the JSON data. For more information, see [Create a table](../../../../../reseller.en-US/User Guide/Data development/Table Management.md#).
+3.  Create a batch synchronization node.
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/62284/155117497731544_en-US.png)
+    1.  Go to the data analytics page. Right-click the specified workflow and choose **new** \> **data integration** \> **offline synchronization**.
 
-    You can set the table parameters on the graphical interface. The mqdata table has only one column, which is named MQ data. The data type is string.
+    2.  In **create a node** dialog box, enter **node name**, and click **submit**.
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/62284/155117497731545_en-US.png)
+    3.  In the top navigation bar, choose ![Conversion script](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/3411359951/p100995.png)icon.
 
--   **3. Set the parameters.**
+    4.  In script mode, click ![**](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/4411359951/p101002.png)icon.
 
-    After creating a table, you can set the data synchronization task parameters on the graphical interface, as shown in the following figure. First, set the destination data source to odps\_first and the destination table to mqdata. Then, set the original data source to OSS and enter the file path and name as the object prefix.
+    5.  In **import Template** dialog box **SOURCE type**, **data source**, **target type** and **data source**, and click **confirm**.
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/62284/155117497731546_en-US.png)
+    6.  Modify JSON code and click the ![Run icon](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/4411359951/p101008.png) icon.
 
-    **Note:** You can set the column delimiter to caret \(^\) or any other character that is not contained in the TXT file. DataWorks supports multiple column delimiters for the TXT data sources in OSS. Therefore, you can use characters such as %&%\#^$$^% to separate the data into a column.
+        Sample code:
 
-    Select **Enable Same Line Mapping**.
-
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/62284/155117497731548_en-US.png)
-
-    Click the script switching button in the upper-left corner to switch to the script mode. Set fileFormat to `"fileFormat":"binary"`. The following is an example of the code in script mode:
-
-    ```
-    
-    {
-        "type": "job",
-        "steps": [
-            {
-                "stepType": "oss",
-                "parameter": {
-                    "fieldDelimiterOrigin": "^",
-                    "nullFormat": "",
-                    "compress": "",
-                    "datasource": "OSS_userlog",
-                    "column": [
-                        {
-                            "name": 0,
-                            "type": "string",
-                            "index": 0
-                        }
-                    ],
-                    "skipHeader": "false",
-                    "encoding": "UTF-8",
-                    "fieldDelimiter": "^",
-                    "fileFormat": "binary",
-                    "object": [
-                        "applog.txt"
-                    ]
-                },
-                "name": "Reader",
-                "category": "reader"
-            },
-            {
-                "stepType": "odps",
-                "parameter": {
-                    "partition": "",
-                    "isCompress": false,
-                    "truncate": true,
-                    "datasource": "odps_first",
-                    "column": [
-                        "mqdata"
-                    ],
-                    "emptyAsNull": false,
-                    "table": "mqdata"
-                },
-                "name": "Writer",
-                "category": "writer"
-            }
-        ],
-        "version": "2.0",
-        "order": {
-            "hops": [
+        ```
+        {
+            "type": "job",
+            "steps": [
                 {
-                    "from": "Reader",
-                    "to": "Writer"
+                    "stepType": "oss",
+                    "parameter": {
+                        "fieldDelimiterOrigin": "^",
+                        "nullFormat": "",
+                        "compress": "",
+                        "datasource": "OSS_userlog",
+                        "column": [
+                            {
+                                "name": 0,
+                                "type": "string",
+                                "index": 0
+                            }
+                        ],
+                        "skipHeader": "false",
+                        "encoding": "UTF-8",
+                        "fieldDelimiter": "^",
+                        "fileFormat": "binary",
+                        "object": [
+                            "applog.txt"
+                        ]
+                    },
+                    "name": "Reader",
+                    "category": "reader"
+                },
+                {
+                    "stepType": "odps",
+                    "parameter": {
+                        "partition": "",
+                        "isCompress": false,
+                        "truncate": true,
+                        "datasource": "odps_first",
+                        "column": [
+                            "mqdata"
+                        ],
+                        "emptyAsNull": false,
+                        "table": "mqdata"
+                    },
+                    "name": "Writer",
+                    "category": "writer"
                 }
-            ]
-        },
-        "setting": {
-            "errorLimit": {
-                "record": ""
+            ],
+            "version": "2.0",
+            "order": {
+                "hops": [
+                    {
+                        "from": "Reader",
+                        "to": "Writer"
+                    }
+                ]
             },
-            "speed": {
-                "concurrent": 2,
-                "throttle": false,
-                "dmu": 1
+            "setting": {
+                "errorLimit": {
+                    "record": ""
+                },
+                "speed": {
+                    "concurrent": 2,
+                    "throttle": false,
+                }
             }
         }
-    }
-    ```
-
-    **Note:** In this step, after the JSON file is synchronized from OSS to MaxCompute, data in the file is saved in the same row. That is, data in the JSON file shares the same field. You can use the default values for other parameters.
-
-    After completing the preceding settings, click **run**.
+        ```
 
 
-## Verify the result {#section_opc_bp3_pgb .section}
+## Use the GET\_JSON\_OBJECT function to extract JSON objects
 
-1.  Create an ODPS SQL node in your [Business Flow](../../../../../reseller.en-US/User Guide/Data development/Business flow/Business flow.md#).
+1.  Create an ODPS SQL node.
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/62284/155117497731551_en-US.png)
+    1.  Right-click the workflow and choose **new** \> **MaxCompute** \> **ODPS SQL**.
 
-2.  Enter the `SELECT * from mqdata;` statement to view the data in the mqdata table.
+    2.  In **create a function** dialog box, enter **function name**, click **submit**.
 
-    **Note:** You can also run the `SELECT * from mqdata;` command on the [MaxCompute client](../../../../../reseller.en-US/Tools and Downloads/Client.md#) to view the data and perform subsequent steps.
+    3.  On the configuration tab of the ODPS SQL node, enter the following statements:
 
-3.  Verify that the data imported to the table is correct and use `SELECT GET_JSON_OBJECT(mqdata.MQdata,'$.expensive') FROM mqdata;` to obtain the value of expensive in the JSON file.
+        ```
+        --Query data in the mqdata table.
+        SELECT * from mqdata;
+        --Obtain the value of the expensive field.
+        SELECT GET_JSON_OBJECT(mqdata.MQdata,'$.expensive') FROM mqdata;
+        ```
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/62284/155117497731553_en-US.png)
+    4.  Click ![**](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/0311359951/p100471.png) icon to run the code.
 
+    5.  You can **operation Log** view the results.
 
-## Additional information {#section_y4g_zlb_pgb .section}
-
-To verify the result, you can also use the built-in string function [GET\_JSON\_OBJECT](../../../../../reseller.en-US/User Guide/SQL/Builtin functions/String functions.md#section_cdt_gxz_vdb) in MaxCompute to obtain the JSON data as needed.
 
