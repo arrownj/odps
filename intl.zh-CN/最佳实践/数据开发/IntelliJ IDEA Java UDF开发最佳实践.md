@@ -1,30 +1,36 @@
-# IntelliJ IDEA Java UDF开发最佳实践 {#task_lph_3mw_dgb .task}
+---
+keyword: [IntelliJ IDEA, Java UDF]
+---
 
-IntelliJ IDEA是Java语言的集成开发环境，可以帮助我们快速的开发Java程序。本文为您详细介绍如何使用IntelliJ IDEA进行Java UDF开发。
+# IntelliJ IDEA Java UDF开发最佳实践
 
-在开始UDF开发实践之前，您需要做如下准备工作：
+IntelliJ IDEA是Java语言的集成开发环境，可以帮助您快速的开发Java程序。本文为您详细介绍如何使用IntelliJ IDEA进行Java UDF开发，实现大写字母转换为小写字母。
 
-1.  准备IntelliJ IDEA开发工具，请参见[安装Studio](../../../../../intl.zh-CN/工具及下载/MaxCompute Studio/工具安装与版本信息/安装IntelliJ IDEA.md)。
-2.  通过IntelliJ IDEA MaxCompute Studio[创建MaxCompute项目连接](../../../../../intl.zh-CN/工具及下载/MaxCompute Studio/项目空间连接管理.md)。
-3.  连接MaxCompute项目成功后，您需要[创建MaxCompute Java Module](../../../../../intl.zh-CN/工具及下载/MaxCompute Studio/开发Java程序/创建MaxCompute Java Module.md)。
+-   准备IntelliJ IDEA开发工具，请参见[安装Studio](/intl.zh-CN/工具及下载/MaxCompute Studio/工具安装与版本信息/安装IntelliJ IDEA.md)。
+-   通过IntelliJ IDEA连接MaxCompute Studio[创建MaxCompute项目连接](/intl.zh-CN/工具及下载/MaxCompute Studio/管理项目连接.md)。
+-   连接MaxCompute项目成功后，您需要[创建MaxCompute Java Module](/intl.zh-CN/工具及下载/MaxCompute Studio/开发Java程序/创建MaxCompute Java Module.md)。
+-   在MaxCompute上创建表并上传大写字母作为数据。详情请参见[建表并上传数据]()。建表语句如下。
 
-开发环境准备完成后即可开发UDF，下面将为您介绍一个字符小写转换功能的UDF实现示例。
+    ```
+    create table upperABC(upper string);
+    ```
 
-**说明：** 更多UDF开发的相关资料请参见[Java UDF](../../../../../intl.zh-CN/用户指南/SQL/UDF/Java UDF.md#)。
 
-1.  **创建Java UDF Project** 
+1.  创建Java UDF Project。
 
-    首先在您的IntelliJ IDEA中展开已创建的MaxCompute Java Module目录，导航至**src** \> **main** \> **java** \> **New**，单击**MaxCompute Java** ，如下图所示。
+    1.  在IntelliJ IDEA中已创建的MaxCompute Java Module目录上右键单击**java**，选择**New** \> **MaxCompute Java**。
 
-    填写**Name**，输入`package名称.文件名`，**Kind**选择UDF，单击**OK** ，如下图所示。
+        ![**](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/6993359951/p100670.png)
 
-    **说明：** 
+    2.  在**Create new MaxCompute java calss**对话框中填写配置参数，单击**OK**完成创建类。
 
-    -   Name：填写创建的MaxCompute Java Class名称，如果还没创建package，可以在此处填写packagename.classname，会自动生成package。
-    -   Kind：选择类型。目前支持的类型有：自定义函数（UDF/UDAF/UDTF）、MapReduce（Driver/Mapper/Reducer）、非结构化开发（StorageHandler/Extractor）等。
-2.  **编辑Java UDF代码** 在您新建的Java UDF项目（本例中的porjectLower）中编辑代码，如下图。
+        -   **Name**：填写创建的MaxCompute Java Class名称，输入`package名称.文件名`。如果还没创建Package，可以在此处填写`packagename.classname`，会自动生成Package。
+        -   **Kind**：选择创建类型，选择UDF。目前支持的类型有自定义函数（包括UDF、UDAF和UDTF）、MapReduce（包括Driver、Mapper和Reducer）、非结构化开发（包括StorageHandler和Extractor）等。
+2.  编辑Java UDF代码。
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/80567/155056971134458_zh-CN.png)
+    在新建的Java UDF项目中编辑代码。
+
+    ![](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/6993359951/p34458.png)
 
     示例代码如下。
 
@@ -41,63 +47,74 @@ IntelliJ IDEA是Java语言的集成开发环境，可以帮助我们快速的开
     }
     ```
 
-    **说明：** 这里的代码模板可在您的Intellij IDEA中自定义，具体操作路径：**Settings** \> **Editor** \> **File Code Templates**，然后在Code标签页中寻找MaxCompute对应的模板修改。
+3.  测试UDF，查看UDF运行是否符合预期。测试UDF有单元测试和本地运行两种方式，本文以本地运行举例。
 
-3.  **测试UDF** 开发UDF完成后，可通过单元测试和本地运行两种方式进行测试，看是否符合预期结果，操作如下。
-    1.  **单元测试** 在您的Modul项目中examples目录下有各种类型的单元测试示例，您可参考示例编写自己的Unit Test。
+    1.  在Java目录下，右键单击UDF类，选择**Run '类名.main\(\)'**。
 
-        ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/80567/155056971134470_zh-CN.png)
+    2.  在**Run/Debug Configurations**页面上配置运行参数。
 
-        测试结果如下。
+        ![debug](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/6993359951/p95989.png)
 
-        ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/80567/155056971134473_zh-CN.png)
+        -   MaxCompute project：UDF运行使用的MaxCompute空间。本地运行时选择**local**。
+        -   MaxCompute table：UDF运行时需要使用的MaxCompute表的名称。
+        -   Table columns：UDF运行时需要使用的MaxCompute表的列信息。
+    3.  单击**OK**，运行结果如下图。
 
-        我们可以看到大写字母"ALIYUN"已经成功转换成小写字母"aliyun"输出。
+        ![](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/6993359951/p34510.png)
 
-    2.  **本地运行** 在您的IntelliJIDEA中本地运行UDF时，需要指定运行数据源，有以下两种方式设定测试数据源：
+4.  发布UDF。测试通过后将UDF打包为JAR资源。
 
-        -   MaxCompute Studio通过Tunnel服务自动下载指定项目下的表数据到warehouse目录下。
-        -   提供Mock项目及表数据，即您可参考warehouse下的example\_project自行设置。
-        操作步骤
+    1.  右键单击已经编译成功的Java代码，选择**Deploy to server…**。
 
-        1.  为了测试Java UDF代码，我们可以首先在MaxCompute上存放一些大写字母作为输入数据。您可以利用script脚本文件或者odpscmd客户端使用SQL语句`create table upperABC(upper string);`新建一个名为upperABC的测试表格，如图。
+    2.  在**Package a jar and submit resource**对话框中，配置相关参数。
 
-            ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/80567/155056971134592_zh-CN.png)
+        ![](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/6993359951/p2060.png)
 
-        2.  右击UDF类，单击**Run '类名.main\(\)'**，弹出run configurations对话框，如下图。
+        -   **MaxCompute project**：指定目标MaxCompute项目的名称。
+        -   **Resource name**：指定打包的资源名。
+        -   **Function name**：指定打包的函数名称。
+        -   **Force update if already exists**：选择当资源或函数已存在时是否强制更新。
+    3.  单击**OK**，完成打包。
 
-            ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/80567/155056971134483_zh-CN.png)
+5.  上传JAR包。打包成功后，需要将该JAR包上传到MaxComptute服务端。
 
-            **说明：** 
+    1.  在顶部菜单栏，单击**MaxCompute** \> **添加资源**。
 
-            -   UDF/UDAF/UDTF一般作用于select子句中表的某些列，需要配置MaxCompute project，table和column（元数据来源于project explorer和warehouse下的Mock项目）。复杂类型的调试也是支持的。
-            -   如果指定项目下的表数据未被下载到warehouse中，需要先下载数据，默认下载100条。默认下载100条，如需更多数据，可配置Download record limit项。
-            -   UDF的local run框架会将warehouse中指定列的数据作为UDF的输入，开始本地运行UDF，您可以在控制台看到日志输出和结果打印。
-            -   如果采用Mock项目或已下载数据，则直接运行。
-        单击**OK**，运行结果如下图。
+    2.  在**Add Resource**对话框中配置相关信息，单击**OK**。
 
-        ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/80567/155056971234510_zh-CN.png)
+        ![](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/6993359951/p2062.png)
 
-4.  **发布UDF** 此时我们的Lower.java测试通过，接下来我们要将其打包成jar资源上传到MaxCompute服务端上。一个UDF要想发布到服务端供生产使用，要经过**打包** \> **上传** \> **注册**三个步骤。针对此，IntelliJ IDEA MaxCompute Studio提供了一键发布功能（Studio会依次执行maven clean package，上传jar和注册UDF三个步骤，一次完成）。具体的操作如下。右键单击UDF的Java文件，选择**Deploy to server**，弹框里选择注册到哪一个MaxCompute project，依次输入Function name和Resource name，Resource name可以修改，如下图。
+        -   **MaxCompute project**：指定目标MaxCompute项目的名称。
+        -   **Resource file**：指定JAR包路径。
+        -   **Resource name**：输入上传的资源名。
+        -   **Force update if already exists**：选择当资源或函数已存在时是否强制更新。
+    3.  在左侧导航栏，单击**Project Explorer**。
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/80567/155056971234564_zh-CN.png)
+    4.  在**Project Explorer**区域的**Resources**节点下可以看到该资源。
 
-    **说明：** 
+6.  注册UDF。JAR包上传完成后，需要注册UDF函数后您才可以调用该函数。
 
-    如果您想了解打包、上传和注册的详细操作步骤，请参见[打包、上传和注册](../../../../../intl.zh-CN/工具及下载/MaxCompute Studio/开发Java程序/打包、上传和注册.md#)。
+    1.  单击顶部菜单栏上的**MaxCompute**，选择**创建UDF**。
 
-    填写完成后，单击**OK**即可完成注册，成功后会有提示。您可在连接的MaxCompute项目下找到已经注册好的Function函数，如图所示。
+    2.  在**Create Function**页面配置如下参数，然后单击**OK**。
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/80567/155056971234572_zh-CN.png)
+        ![](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/6993359951/p2065.png)
 
-5.  **试用UDF** 成功注册UDF后，即可试用UDF。在您的Module项目中打开SQL脚本，执行命令`select Lower_test('ALIYUN');`，显示结果如下图所示。
+        -   **MaxCompute project**：选择要上传的Project名称。
+        -   **Function name**：函数名称。
+        -   **Using resources**：函数依赖的JAR包名称。
+        -   **Main class**：JAR的主类。
+        -   **Force update if already exists**：当资源或函数已存在时是否强制更新。
+7.  使用UDF。
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/80567/155056971234603_zh-CN.png)
+    在MaxCompute客户端上执行如下命令测试Java UDF函数。
 
-    您也可以在odpscmd客户端使用select Lower\_test\('ALIYUN'\) from uppperABC;命令测试您的Java UDF函数。到此，您使用IntelliJIDEA上开发的Java UDF函数Lower\_test已经可用了。
+    ```
+    select Lower_test('ALIYUN');
+    ```
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/80567/155056971234582_zh-CN.png)
+    返回结果如下。表明使用IntelliJ IDEA上开发的Java UDF函数Lower\_test已经可用了。
 
+    ![](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/7993359951/p34582.png)
 
-如果您要使用Eclipse开发工具完成完整的Java UDF开发流程，请参见[Eclipse Java UDF开发最佳实践](intl.zh-CN/最佳实践/数据开发/Eclipse Java UDF开发最佳实践.md#)。
 
