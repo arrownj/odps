@@ -1,40 +1,35 @@
-# SQLTask配合Tunnel实现大量数据导出 {#concept_388499 .concept}
+---
+keyword: [SQLTask, Tunnel]
+---
+
+# SQLTask配合Tunnel实现大量数据导出
 
 本文为您介绍如何通过使用SQLTask配合Tunnel实现大量数据导出。
 
-## SQLTask {#section_pd4_rqe_ew3 .section}
+## 背景信息
 
-SQLTask是MaxCompute SQL的SDK接口。借助SQLTask，您可以方便地运行SQL并获得其返回结果。关于SQLTask的详细描述，请参见[Java SDK概述](cn.zh-CN/SDK参考/Java SDK/Java SDK介绍.md#)。
+-   SQL Task
 
-`SQLTask.getResult(i)`返回的是一个list，您可以循环迭代这个list以获得完整的SQL计算返回结果。但是，此方法有限制条件：目前select语句返回至客户端的数据条数最大值为1万（参见[其他操作](../../../../cn.zh-CN/开发/常用命令/其他操作.md#)中READ\_TABLE\_MAX\_ROW的取值范围）。即如果在客户端上（包括使用SQLTask SDK）直接select，相当于查询结果上最后加上了limit 10000（如果使用CREATE TABLE XX AS SELECT或用INSERT INTO/OVERWRITE TABLE把结果固化到具体的表里，则无这项限制）。
+    SQL Task是MaxCompute SQL的SDK接口。借助SQL Task，您可以方便地运行SQL并获得其返回结果。SQL Task的详情请参见[Java SDK介绍](/cn.zh-CN/SDK参考/Java SDK/Java SDK介绍.md)。
 
-## Tunnel {#section_9x7_6y4_o0t .section}
+    `SQLTask.getResult(i)`返回的是一个列表（List），您可以循环迭代此列表以获得完整的SQL计算返回结果。但是，使用此方法时SELECT语句返回至客户端的数据条数最多为1万条（参见[项目空间操作](/cn.zh-CN/开发/常用命令/项目空间操作.md)中READ\_TABLE\_MAX\_ROW的取值范围）。即如果在客户端上（包括使用SQL Task SDK）执行SELECT语句，相当于查询结果上最后加上了`limit 10000`。如果使用CREATE TABLE XX AS SELECT或用INSERT INTO/OVERWRITE TABLE把结果固化到具体的表里，则无这项限制。
 
-如果需要导出的查询结果是某张表或具体某个分区的全部内容，可以使用Tunnel命令行共计完成。MaxCompute提供了Tunnel命令行工具和Tunnel SDK，详情请参见[上传下载命令](../../../../cn.zh-CN/开发/数据上传下载/上传下载命令.md#)和[批量数据通道概要](../../../../cn.zh-CN/开发/数据上传下载/批量数据通道SDK介绍/批量数据通道概要.md#)。
+-   Tunnel
 
-使用Tunnel命令行工具导出数据示例
+    如果需要导出的查询结果是某张表或具体某个分区的全部内容，可以使用Tunnel命令行完成。MaxCompute提供了Tunnel命令行工具和Tunnel SDK，详情请参见[Tunnel命令参考](/cn.zh-CN/开发/数据上传下载/使用Tunnel命令上传下载数据/Tunnel命令参考.md)和[批量数据通道概要](/cn.zh-CN/开发/数据上传下载/批量数据通道SDK介绍/批量数据通道概要.md)。
 
-``` {#codeblock_jrn_pj4_d2q}
->tunnel d wc_out c:\wc_out.dat;
-2017-12-16 19:32:08  -  new session: 201712161932082dxxxxx     total lines: 3
-2017-12-16 19:32:08  -  file [0]: [0, 3), c:\wc_out.dat
-downloading 3 records into 1 file
-2017-12-16 19:32:08  -  file [0] start
-2017-12-16 19:32:08  -  file [0] OK. total: 21 bytes
-download OK
+
+## 示例
+
+SQLTask不能处理超过1万条的记录，但是Tunnel可以，两者可以互补。因此可以基于两者实现超过1万条数据的导出，代码示例如下。
+
 ```
-
-## SQLTask配合Tunnel实现超出1万行的运行结果导出 {#section_fw2_pos_z2b .section}
-
-SQLTask不能处理超过1万条的记录，但是Tunnel可以，两者互补。因此可以基于两者实现数据的导出，代码示例如下。
-
-``` {#codeblock_8m5_8mj_2h7}
 private static final String accessId = "userAccessId";
 private static final String accessKey = "userAccessKey";
-private static final String endPoint = "http://service.odps.aliyun.com/api";
+private static final String endPoint = "http://service.cn-shanghai.maxcompute.aliyun.com/api";
 private static final String project = "userProject";
 private static final String sql = "userSQL";
-private static final String table = "Tmp_" + UUID.randomUUID().toString().replace("-", "_");//此处使用随机字符串作为临时导出存放数据的表的名字
+private static final String table = "Tmp_" + UUID.randomUUID().toString().replace("-", "_");//此处使用随机字符串作为临时导出存放数据的表的名字。
 private static final Odps odps = getOdps();
 public static void main(String[] args) {
     System.out.println(table);
@@ -65,7 +60,7 @@ private static void tunnel() {
 }
 /*
      * 保存这条数据。
-     * 如果数据量少，可以直接打印结果后拷贝。实际使用场景下也可以使用JAVA.IO写到本地文件，或写到远端保存数据结果。
+     * 如果数据量少，可以直接打印结果后拷贝。实际使用场景下也可以使用JAVA.IO写到本地文件，或在远端服务器上保存数据结果。
      * */
 private static void consumeRecord(Record record, TableSchema schema) {
     System.out.println(record.getString("username")+","+record.getBigint("cnt"));
