@@ -1,154 +1,183 @@
-# Migrate JSON data from MongoDB to MaxCompute {#concept_z2b_fl2_xfb .concept}
+---
+keyword: migrate data from MongoDB to MaxCompute
+---
 
-This topic describes how to use the data integration feature of DataWorks to extract JSON fields from MongoDB to MaxCompute.
+# Migrate JSON data from MongoDB to MaxCompute
 
-## Preparations {#section_qv1_nm2_xfb .section}
+This topic describes how to use the data integration feature of DataWorks to migrate JSON fields from MongoDB to MaxCompute.
+
+-   MaxCompute is activated. For more information, see [Activate MaxCompute](/intl.en-US/Prepare/Activate MaxCompute.md).
+-   DataWorks is activated. To activate DataWorks, go to the [DataWorks buy page](https://common-buy.aliyun.com/).
+-   A workflow is created in the DataWorks console. In this example, a workflow is created in a DataWorks workspace in basic mode. For more information, see [Create a workflow]().
+
+## Prepare test data in MongoDB
 
 1.  Prepare an account.
 
-    Create a user in the database in advance to add data sources in DataWorks. In this example, you can run the `db.createUser({user:"bookuser",pwd:"123456",roles:["root"]})` command to create a user named bookuser. The password of the user is 123456, and the permission is root.
+    Create a user in your MongoDB database. The username and password of the user are used when you configure a MongoDB connection in DataWorks. In this example, run the following command to create a user:
+
+    ```
+    db.createUser({user:"bookuser",pwd:"123456",roles:["root"]})
+    ```
+
+    The username is bookuser, the password is 123456, and the permission is root.
 
 2.  Prepare data.
 
-    Upload data to your MongoDB. In this example, Alibaba Cloud ApsaraDB for MongoDB is used. The network type is VPC. \(An Internet IP address is required for MongoDB to communicate with the default resource group of DataWorks.\) The test data is as follows:
+    Upload the following test data to your MongoDB database. In this example, an [ApsaraDB for MongoDB](/intl.en-US/Quick Start for Standalone/Use a standalone ApsaraDB for MongoDB instance.md) instance in a VPC is used. You must apply for a public endpoint for the ApsaraDB for MongoDB instance to communicate with the default resource group of DataWorks.
 
     ```
-    
     {
-        "store": {
-            "book": [
-                 {
-                    "category": "reference",
-                    "author": "Nigel Rees",
-                    "title": "Sayings of the Century",
-                    "price": 8.95
-                 },
-                 {
-                    "category": "fiction",
-                    "author": "Evelyn Waugh",
-                    "title": "Sword of Honour",
-                    "price": 12.99
-                 },
-                 {
-                     "category": "fiction",
-                     "author": "J. R. R. Tolkien",
-                     "title": "The Lord of the Rings",
-                     "isbn": "0-395-19395-8",
-                     "price": 22.99
-                 }
-              ],
-              "bicycle": {
-                  "color": "red",
-                  "price": 19.95
-              }
-        },
-        "expensive": 10
-    }
+                            "store": {
+                            "book": [
+                            {
+                            "category": "reference",
+                            "author": "Nigel Rees",
+                            "title": "Sayings of the Century",
+                            "price": 8.95
+                            },
+                            {
+                            "category": "fiction",
+                            "author": "Evelyn Waugh",
+                            "title": "Sword of Honour",
+                            "price": 12.99
+                            },
+                            {
+                            "category": "fiction",
+                            "author": "J. R. R. Tolkien",
+                            "title": "The Lord of the Rings",
+                            "isbn": "0-395-19395-8",
+                            "price": 22.99
+                            }
+                            ],
+                            "bicycle": {
+                            "color": "red",
+                            "price": 19.95
+                            }
+                            },
+                            "expensive": 10
+                            }
     ```
 
-    Log on to the DMS console of MongoDB. In this example, the database name is admin and the collection is userlog. You can run the db.userlog.find\(\).limit\(10\) command in the query window to view the uploaded data.
-
-
-## Use DataWorks to extract data to MaxCompute {#section_sk4_zq2_xfb .section}
-
--   **1. Add a MongoDB data source.**
-
-    In the DataWorks console, go to the [Data Integration](../../../../../reseller.en-US/User Guide/Data integration/Data integration introduction/Data integration overview.md#) page and add a [MongoDB](../../../../../reseller.en-US/User Guide/Data integration/Data source configuration/Configure MongoDB data source.md#) data source.
-
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/64919/155080408532876_en-US.png)
-
-    The parameters are shown in the following figure. Click **Complete** after the connectivity test is successful. In this example, the network type of MongoDB is VPC. Therefore, the **Data Source Type** must be set to **Public IP Address Available**.
-
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/64919/155080408532877_en-US.png)
-
-    To obtain the IP address and the port number, log on to the and click the target instance. Example parameters are shown in the following figure.
-
--   **2. Create a data synchronization task.**
-
-    In the DataWorks console, create a data synchronization node. For more information, see [Configure OSS Reader](../../../../../reseller.en-US/User Guide/Data integration/Task configuration/Configure reader plug-in/Configure OSS Reader.md#).
-
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/64919/155080408532879_en-US.png)
-
-    At the same time, create a table named mqdata in DataWorks to store JSON data. For more information, see [Create a table](../../../../../reseller.en-US/User Guide/Data development/Table Management.md#).
-
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/64919/155080408538569_en-US.png)
-
-    You can set the table parameters on the graphical interface. The mqdata table has only one column, which is named MQ data. The data type is string.
-
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/62284/155080408531545_en-US.png)
-
--   **3. Set the parameters.**
-
-    After creating a table, you can set the data synchronization task parameters on the graphical interface. First, set the destination data source to odps\_first and the destination table to mqdata. Then, set the original data source to MongoDB and select mongodb\_userlog. After completing the preceding settings, click **Switch to script mode**. The following is an example of the code in script mode:
+3.  Log on to the ApsaraDB for MongoDB console. In this example, the name of the database is admin, and the name of the collection is userlog. You can run the following command to view the uploaded data:
 
     ```
-    
-    {
-        "type": "job",
-        "steps": [
+    db.userlog.find().limit(10)
+    ```
+
+
+## Migrate JSON data from MongoDB to MaxCompute by using DataWorks
+
+1.  Login [DataWorks console](https://workbench.data.aliyun.com/console).
+
+2.  Create a destination table in the DataWorks console. This table is used to store the data that is migrated from MongoDB.
+
+    1.  Right-click a created **workflow**, Select **new** \> **MaxCompute** \> **table**.
+
+    2.  In **create a table** page, select the engine type, and enter **table name**.
+
+    3.  On the table editing page, click **DDL Statement**.
+
+    4.  In the DDL Statement dialog box, enter the following statement and click **Generate Table Schema**:
+
+        ```
+        create table mqdata (MQ data string);
+        ```
+
+    5.  Click **Commit to production environment**.
+
+3.  Configure a MongoDB connection. For more information, see [Configure a MongoDB connection]().
+
+4.  Create a batch sync node.
+
+    1.  Go to the data analytics page. Right-click the specified workflow and choose **new** \> **data integration** \> **offline synchronization**.
+
+    2.  In **create a node** dialog box, enter **node name**, and click **submit**.
+
+    3.  In the top navigation bar, choose ![Conversion script](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/3411359951/p100995.png)icon.
+
+    4.  In script mode, click ![**](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/4411359951/p101002.png)icon.
+
+    5.  In **import Template** dialog box **SOURCE type**, **data source**, **target type** and **data source**, and click **confirm**.
+
+    6.  Enter the following script in the code editor:
+
+        ```
+        {
+            "type": "job",
+            "steps": [
             {
                 "stepType": "mongodb",
                 "parameter": {
-                    "datasource": "mongodb_userlog",
-     //Data source name
+                    "datasource": "mongodb_userlog",// The name of the connection.
                     "column": [
                         {
-                            "name": "store.bicycle.color", //JSON field path. In this example, the value of color is extracted.
-                            "type": "document.document.string" //The number of fields in this line must be the same as that in the preceding line (the name line). If the JSON field is a level-1 field, for example, the expensive field in this topic, enter the string.
+                        "name": "store.bicycle.color", // The path of the JSON field. In this example, the color field is extracted.
+                        "type": "document.String" // For fields other than top-level fields, the data type of such a field is the same as that of its top-level field. If the specified JSON field is a top-level field, such as the expensive field in this example, enter string.
                         }
-                    ],
-                    "collectionName //Collection name": "userlog"
-                },
+                      ],
+                    "collectionName": "userlog" // The name of the collection.
+                    },
                 "name": "Reader",
                 "category": "reader"
-            },
-            {
-                "stepType": "odps",
-                "parameter": {
+                },
+                {
+                    "stepType": "odps",
+                    "parameter": {
                     "partition": "",
                     "isCompress": false,
                     "truncate": true,
                     "datasource": "odps_first",
                     "column": [
-                              "mqdata" //Table column name in MaxCompute
+                    "mqdata" // The name of the column in the MaxCompute table.
                     ],
                     "emptyAsNull": false,
                     "table": "mqdata"
-                },
-                "name": "Writer",
-                "category": "writer"
-            }
-        ],
-        "version": "2.0",
-        "order": {
-            "hops": [
-                {
+                    },
+                    "name": "Writer",
+                    "category": "writer"
+                    }
+                    ],
+                    "version": "2.0",
+                    "order": {
+                    "hops": [
+                    {
                     "from": "Reader",
                     "to": "Writer"
+                    }
+                    ]
+                    },
+                    "setting": {
+                    "errorLimit": {
+                    "record": ""
+                    },
+                    "speed": {
+                    "concurrent": 2,
+                    "throttle": false,
+                    }
+                    }
                 }
-            ]
-        },
-        "setting": {
-            "errorLimit": {
-                "record": ""
-            },
-            "speed": {
-                "concurrent": 2,
-                "throttle": false,
-                "dmu": 1
-            }
-        }
-    }
+        ```
+
+    7.  Click ![**](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/0311359951/p100471.png)icon to run the code.
+
+    8.  You can **operation Log** view the results.
+
+
+## Verify the execution result
+
+1.  Right-click the workflow and choose **new** \> **MaxCompute** \> **ODPS SQL**.
+
+2.  In **create a node** dialog box, enter **node name**, and click **submit**.
+
+3.  On the configuration tab of the ODPS SQL node, enter the following statement:
+
+    ```
+    SELECT * from mqdata;
     ```
 
-    After completing the preceding settings, click **Run**. If the following information is displayed, the code has run successfully.
+4.  Click ![**](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/0311359951/p100471.png)icon to run the code.
 
+5.  You can **operation Log** view the results.
 
-## Verify the result {#section_cwq_bcf_xfb .section}
-
-Create an ODPS SQL node in your [Business Flow](../../../../../reseller.en-US/User Guide/Data development/Business flow/Business flow.md#).
-
-![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/62284/155080408631551_en-US.png)
-
-Enter the `SELECT * from mqdata;` statement to view the data in the mqdata table. You can also run the SELECT \* from mqdata; command on the [MaxCompute client](../../../../../reseller.en-US/Tools and Downloads/Client.md#) to view the data.
 
