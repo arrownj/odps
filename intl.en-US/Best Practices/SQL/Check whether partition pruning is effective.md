@@ -41,7 +41,7 @@ To check whether partition pruning is effective for a query, execute the EXPLAIN
     where ds='20150801';
     ```
 
-    ![Partition pruning](../images/p99318.png)
+    ![Partition pruning](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/8110644061/p99318.png)
 
     The execution plan indicates that only Partition 20150801 of Table xxxxx\_trd\_slr\_ord\_1d is read.
 
@@ -85,7 +85,7 @@ To check whether partition pruning is effective for a query, execute the EXPLAIN
             and b.ds='20150801';
             ```
 
-            ![**](../images/p99324.png)
+            ![**](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/8110644061/p99324.png)
 
             The execution plan indicates that partition pruning is effective for the right table, but not the left table.
 
@@ -104,7 +104,7 @@ To check whether partition pruning is effective for a query, execute the EXPLAIN
             and b.ds='20150801';
             ```
 
-            ![&&](../images/p99327.png)
+            ![&&](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/8110644061/p99327.png)
 
             The execution plan indicates that partition pruning is effective for both tables.
 
