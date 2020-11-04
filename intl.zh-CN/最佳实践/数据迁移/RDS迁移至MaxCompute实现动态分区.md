@@ -1,72 +1,68 @@
-# RDS迁移至MaxCompute实现动态分区 {#concept_gxd_crn_4fb .concept}
+---
+keyword: [RDS, MaxCompute]
+---
+
+# RDS迁移至MaxCompute实现动态分区
 
 本文为您介绍如何使用DataWorks数据集成同步功能自动创建分区，动态地将RDS中的数据迁移至MaxCompute大数据计算服务。
 
-## 准备工作 {#section_od5_frc_pfb .section}
+-   准备DataWorks环境
+    1.  [开通MaxCompute](/intl.zh-CN/准备工作/开通MaxCompute.md)。
+    2.  [开通DataWorks](https://common-buy.aliyun.com/)。
+    3.  在DataWorks上完成创建业务流程，本例使用DataWorks简单模式。详情请参见[创建业务流程]()。
+-   新增数据源
+    -   新增MySQL数据源作为数据来源，详情请参见[配置MySQL数据源]()。
+    -   新增MaxCompute数据源作为目标数据源接收RDS数据，详情请参见[配置MaxCompute数据源]()。
 
-1.  [开通MaxCompute](../../../../cn.zh-CN/准备工作/开通MaxCompute.md#)服务并[创建工作空间](../../../../cn.zh-CN/准备工作/创建项目.md#)。本文选择的区域是华北2（北京）。
+## 自动创建分区
 
-    **说明：** 如果您是第一次使用DataWorks，请确认已经根据[准备工作](../../../../cn.zh-CN/准备工作/准备阿里云账号.md#)，准备好账号和项目角色、项目空间等。
+准备工作完成后，需要将RDS中的数据定时每天同步到MaxCompute中，自动创建按天日期的分区。详细的数据同步任务的操作和配置请参见[DataWorks数据开发和运维]()。
 
-2.  新增数据源。
+1.  登录[DataWorks控制台](https://workbench.data.aliyun.com/console)。
 
-    新增[RDS数据源](../../../../cn.zh-CN/使用指南/数据集成/数据源配置/配置MySQL数据源.md#)作为数据来源；同时需要新增[ODPS数据源](https://www.alibabacloud.com/help/zh/faq-detail/74280.htm)作为目标数据源接收RDS数据。配置完成后，在数据集成控制台单击**数据源**可以看到新增的数据源。
+2.  在MaxCompute上创建目标表。
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390014385_zh-CN.png)
+    1.  在左侧导航栏，单击**工作空间列表**。
 
+    2.  单击相应工作空间后的**进入数据开发**。
 
-## 自动创建分区 {#section_sfm_3rc_pfb .section}
+    3.  右键单击已创建的**业务流程**，选择**新建** \> **MaxCompute** \> **表**。
 
-准备工作完成后，需要将RDS中的数据定时每天同步到MaxCompute中，自动创建按天日期的分区。详细的数据同步任务的操作和配置请参见[DataWorks数据开发和运维](../../../../cn.zh-CN/快速开始/使用说明.md#)。
+    4.  在**新建表**页面，选择引擎类型并输入**表名**。
 
-1.  创建目标表。
+    5.  在表的编辑页面，单击**DDL模式**。
 
-    在ODPS数据库中创建RDS对应的目标表ods\_user\_info\_d。在控制台**数据开发**选项下右键单击**新建ODPS SQL节点**创建create\_table\_ddl表，输入建表语句，如下所示。
+    6.  在DDL模式对话框，输入如下建表语句，单击**生成表结构**。
 
-    ``` {#codeblock_g27_x0k_afm}
-    CREATE TABLE IF NOT EXISTS ods_user_info_d (
-    uid STRING COMMENT '用户ID',
-    gender STRING COMMENT '性别',
-    age_range STRING COMMENT '年龄段',
-    zodiac STRING COMMENT '星座'
-    )
-    PARTITIONED BY (
-    dt STRING
-    );                           
-    ```
+        ```
+        CREATE TABLE IF NOT EXISTS ods_user_info_d (
+        uid STRING COMMENT '用户ID',
+        gender STRING COMMENT '性别',
+        age_range STRING COMMENT '年龄段',
+        zodiac STRING COMMENT '星座'
+        )
+        PARTITIONED BY (
+        dt STRING
+        );                           
+        ```
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390033545_zh-CN.png)
+    7.  单击**提交到生产环境**。
 
-    您也可以在**业务流程** \> **表**下选择**新建表**。
+3.  新建离线同步节点。
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390033547_zh-CN.png)
+    1.  进入数据开发页面，右键单击指定业务流程，选择**新建** \> **数据集成** \> **离线同步**。
 
-    详细的信息请参见[建表并上传数据](https://www.alibabacloud.com/help/zh/doc-detail/84670.htm)。
+    2.  在**新建节点**对话框中，输入**节点名称**，并单击**提交**。
 
-2.  新建业务流程。
+    3.  选择数据来源和数据去向。
 
-    进入DataWorks管理控制台，单击对应项目后的**进入数据开发**，开始数据开发操作。选择**数据开发** \> **业务流程**下的**新建业务流程**workshop。
+        ![**](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/9693359951/p102236.png)
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390033546_zh-CN.png)
+4.  配置分区参数。
 
-3.  新建并配置同步任务节点。
+    1.  在右侧导航栏上，单击**调度配置**。
 
-    在新创建的业务流程workshop下，新建同步节点rds\_sync。
-
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390014388_zh-CN.png)
-
-4.  分别选择数据来源和数据去向。
-
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390014391_zh-CN.png)
-
-5.  配置分区参数。
-    1.  单击右侧**调度配置**弹出**基础属性**页面。
-
-        ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390114396_zh-CN.png)
-
-    2.  **参数**值默认为系统自带的时间参数：`${bizdate}`，格式为yyyymmdd。
-
-        ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390114394_zh-CN.png)
+    2.  在**基础属性**区域，设置**参数**。参数值默认为系统自带的时间参数`${bizdate}`，格式为yyyymmdd。
 
         **说明：** 默认**参数**值与**数据去向**中的**分区信息**值对应。调度执行迁移任务时，目标表的分区值会被自动替换为任务执行日期的前一天，默认情况下，您会在当前执行前一天的业务数据，这个日期也叫做业务日期。如果您需要使用当天任务运行的日期作为分区值，则需自定义参数值。
 
@@ -84,95 +80,48 @@
         -   前N小时：`$[hh24miss-N/24]`
         -   后N分钟：`$[hh24miss+N/24/60]`
         -   前N分钟：`$[hh24miss-N/24/60]`
-        **说明：** 
+        **说明：**
 
-        -   请以中括号\[\]编辑自定义变量参数的取值计算公式，例如 `key1=$[yyyy-mm-dd]`。
+        -   使用中括号（\[\]）编辑自定义变量参数的取值计算公式，例如 `key1=$[yyyy-mm-dd]`。
         -   默认情况下，自定义变量参数的计算单位为天。例如 `$[hh24miss-N/24/60]`表示`(yyyymmddhh24miss-(N/24/60 * 1天))`的计算结果，然后按 hh24miss 的格式取时分秒。
         -   使用add\_months的计算单位为月。例如 `$[add_months(yyyymmdd,12 N)-M/24/60]` 表示`(yyyymmddhh24miss-(12 * N * 1月))-(M/24/60 * 1天)`的结果，然后按 `yyyymmdd` 的格式取年月日。
-        详细的参数设置请参见[参数配置](https://www.alibabacloud.com/help/zh/doc-detail/74450.htm)。
+5.  单击![**](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/9993359951/p100471.png)图标运行代码。
 
-6.  测试运行。
-    1.  **保存**所有配置，单击**运行**。
-
-        ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390133548_zh-CN.png)
-
-    2.  查看运行日志。
-
-        日志中显示partition分区值dt=20181025已自动替换成功。
-
-        ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390114399_zh-CN.png)
-
-    3.  验证实际的数据是否已转移到ODPS表中。
-
-        此时可看到数据已经迁移到ODPS表中，并且成功创建了一个分区值。这个任务在执行定时调度时，会将RDS中的数据每天同步至MaxCompute中的按照日期自动创建的分区里。
-
-        ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390214400_zh-CN.png)
-
-        **说明：** 在MaxCompute2.0中分区表查询需要添加分区筛选，不支持全量查询，SQL语句如下。select命令详情请参见[Select操作](../../../../cn.zh-CN/开发/SQL及函数/Select语句/SELECT语法介绍.md#)。
-
-        ``` {#codeblock_mm3_r1m_k6z}
-        --查看是否成功写入MaxCompute。
-        select count(*) from ods_user_info_d where dt=业务日期;
-        ```
+6.  您可以在**运行日志**查看运行结果。
 
 
-## 补数据实验 {#section_cbp_cqd_pfb .section}
+## 补数据实验
 
-如果您的数据中存在大量运行日期之前的历史数据，想要实现自动同步和自动分区，您可以进入DataWorks的**运维中心**，选择当前的同步数据节点，选择**补数据**功能来实现。
+如果您的数据中存在大量运行日期之前的历史数据，需要实现自动同步和自动分区。您可以通过DataWorks的**运维中心**，选择当前的同步数据节点，使用**补数据**功能实现。
 
 1.  在RDS端按照日期筛选出历史数据。
 
-    您可以在迁移阶段设置where过滤条件。示例为将2018-09-13日的历史数据自动同步到MaxCompute的20181025的分区中。
+    您可以在同步节点**数据来源**区域设置**数据过滤**条件。
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390214401_zh-CN.png)
+    ![](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/9693359951/p14401.png)
 
-2.  补数据操作。
+2.  执行补数据操作。详情请参见[补数据实例]()
 
-    单击**保存** \> **提交**。提交后到**运维中心** \> **任务列表** \> **周期任务**中的rds\_sync节点，单击**补数据** \> **当前节点**。
+3.  在运行的日志中查看对RDS数据的抽取结果。
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390220998_zh-CN.png)
+    从运行结果中可以看到MaxCompute已自动创建分区。
 
-3.  跳转至**补数据**节点页面，选择日期区间，单击**确定**。
+    ![](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/9693359951/p21001.png)
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390220999_zh-CN.png)
+4.  运行结果验证。在MaxCompute客户端执行如下命令，查看数据写入情况。
 
-4.  此时会同时生成多个同步的任务实例，将按顺序执行。
-
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390221000_zh-CN.png)
-
-5.  在运行的日志中查看对RDS数据的抽取结果。
-
-    可以看到MaxCompute已自动创建分区。
-
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390221001_zh-CN.png)
-
-6.  查看运行结果。
-
-    1.  查看数据写入的情况，是否自动创建了分区，数据是否已同步到分区表中。
-
-        ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390321002_zh-CN.png)
-
-    2.  查询对应分区信息。
-
-        ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390333549_zh-CN.png)
-
-    **说明：** 在MaxCompute2.0中分区表查询需要添加分区筛选，SQL语句如下。其中分区列需要更新为业务日期，例如任务运行的日期为20180717，业务日期将为20180716。
-
-    ``` {#codeblock_nwv_uyj_r31}
-    --查看是否成功写入MaxCompute。
-    select count(*) from ods_user_info_d where dt=业务日期;
+    ```
+    SELECT count(*) from ods_user_info_d where dt = 20180913;
     ```
 
 
-## Hash实现非日期字段分区 {#section_rr4_tgt_pfb .section}
+## Hash实现非日期字段分区
 
-如果用户数据量较大，或是没有按照日期字段对第一次全量的数据进行分区，而是按照省份等非日期字段分区，则此时数据集成操作将不能实现自动分区。这种情况下，您可以按照RDS中某个字段进行Hash，将相同的字段值自动存放到这个字段对应值的MaxCompute分区中。
+如果您的数据量较大，或没有按照日期字段对第一次全量的数据进行分区，而是按照省份等非日期字段分区，则此时数据集成操作将不能实现自动分区。这种情况下，您可以按照RDS中某个字段进行Hash，将相同的字段值自动存放到这个字段对应值的MaxCompute分区中。
 
-步骤如下：
+1.  将数据全量同步到MaxCompute的一个临时表，创建一个SQL脚本节点。执行如下命令。
 
-1.  将数据全量同步到MaxCompute的一个临时表，创建一个SQL脚本节点。单击**运行** \> **保存** \> **提交**。 SQL命令如下：
-
-    ``` {#codeblock_3ar_55y_mrp}
+    ```
     drop table if exists ods_user_t;
     CREATE TABLE ods_user_t ( 
             dt STRING,
@@ -180,16 +129,17 @@
             gender STRING,
             age_range STRING,
             zodiac STRING);
-    insert overwrite table ods_user_t select dt,uid,gender,age_range,zodiac from ods_user_info_d; --将ODPS表中的数据存入临时表。                       
+    --将MaxCompute表中的数据存入临时表。
+    insert overwrite table ods_user_t select dt,uid,gender,age_range,zodiac from ods_user_info_d;         
     ```
 
 2.  创建同步任务的节点mysql\_to\_odps，即简单的同步任务。将RDS数据全量同步到MaxCompute，无需设置分区。
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390333591_zh-CN.png)
+    ![](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/0793359951/p33591.png)
 
 3.  使用SQL语句进行动态分区到目标表，命令如下。
 
-    ``` {#codeblock_kxe_ipg_wzu}
+    ```
     drop table if exists ods_user_d;
     //创建一个ODPS分区表（最终目的表）。
         CREATE TABLE ods_user_d (
@@ -202,7 +152,7 @@
         dt STRING
     );
     //执行动态分区SQL，按照临时表的字段dt自动分区，dt字段中相同的数据值，会按照这个数据值自动创建一个分区值。
-    //例如dt中有些数据是20180913，会自动在ODPS分区表中创建一个分区，dt=20181025。
+    //例如dt中有些数据是20181025，会自动在ODPS分区表中创建一个分区，dt=20181025。
     //动态分区SQL如下。
     //可以注意到SQL中select的字段多写了一个dt，就是指定按照这个字段自动创建分区。
     insert overwrite table ods_user_d partition(dt)select dt,uid,gender,age_range,zodiac from ods_user_t;
@@ -214,21 +164,16 @@
 
 4.  将三个节点配置成一个工作流，按顺序执行。
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390321007_zh-CN.png)
+    ![](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/0793359951/p21007.png)
 
 5.  查看执行过程。您可以重点观察最后一个节点的动态分区过程。
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390321008_zh-CN.png)
+    ![**](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/0793359951/p103159.png)
 
-6.  查看运行结果。
-    1.  查看数据写入的情况，是否相同的日期数据已被迁移至同一个分区中。
+6.  运行结果验证。在MaxCompute客户端执行如下命令，查看数据写入情况。
 
-        ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390333594_zh-CN.png)
+    ```
+    SELECT count(*) from ods_user_d where dt = 20180913;
+    ```
 
-    2.  查询对应分区信息。
-
-        ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/24452/156205390321013_zh-CN.png)
-
-
-DataWorks数据同步功能可以完成大部分自动化作业，尤其是数据的同步迁移，调度等，了解更多的调度配置请参见调度配置[时间属性](https://www.alibabacloud.com/help/zh/doc-detail/74452.htm)。
 
