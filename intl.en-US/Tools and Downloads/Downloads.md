@@ -1,11 +1,14 @@
-# Downloads {#concept_j55_qsx_wdb .concept}
+---
+keyword: MaxCompute and plug-ins
+---
 
-This document provides you with the download address of the relevant tools and plugins.
+# Downloads
 
--   SDK Downloads: Maven users can search odps-sdk from Maven library to get different versions of the Java SDK.
--   MaxCompute client: [Click here](http://docs-aliyun.cn-hangzhou.oss.aliyun-inc.com/assets/attach/119118/cn_zh/1559120057202/odpscmd_public_May.zip) to download the new version of MaxCompute client.
--   [Eclipse plugin](https://docs-aliyun.cn-hangzhou.oss.aliyun-inc.com/cn/odps/0.0.90/assets/download/odps-eclipse-plugin-bundle-0.16.0.zip)
--   [IntelliJ plugin](https://www.jetbrains.com/idea/?spm=5176.doc50891.2.4.2O5djt), [Studio](https://plugins.jetbrains.com/plugin/9193-maxcompute-studio)
--   [JDBC](https://github.com/aliyun/aliyun-odps-jdbc/releases)
--   [PHP SDK](https://github.com/aliyun-beta/aliyun-odps-php-sdk)
+This topic provides the download addresses of the tools and plug-ins that may be required when you use MaxCompute.
+
+-   SDK: Maven users can search odps-sdk from the [Maven repository](http://search.maven.org/) to obtain different versions of the SDK for Java.
+-   MaxCompute client: [Download the selected version of the MaxCompute client from GitHub](https://github.com/aliyun/aliyun-odps-console/releases).
+-   IntelliJ IDEA: Download [IntelliJ IDEA](https://www.jetbrains.com/idea/?spm=5176.doc50891.2.4.2O5djt) and the [MaxCompute Studio](https://plugins.jetbrains.com/plugin/9193-maxcompute-studio) plug-in.
+-   Java Database Connectivity \(JDBC\): MaxCompute provides an open source JDBC driver. You can download the latest [JDBC driver](https://github.com/aliyun/aliyun-odps-jdbc/releases) from GitHub.
+-   SDK for PHP: You can download the [SDK for PHP](https://github.com/aliyun-beta/aliyun-odps-php-sdk) from GitHub.
 
