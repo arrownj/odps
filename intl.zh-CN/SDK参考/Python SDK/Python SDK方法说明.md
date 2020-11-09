@@ -37,7 +37,7 @@ keyword: Python SDK
 -   通过调用入口对象的`exist_table()`方法判断表是否存在；通过调用`get_table()`方法获取表。
 
     ```
-    t = odps.get_table('dual')
+    t = odps.get_table('table_name')
     t.schema
     odps.Schema {
       c_int_a                 bigint
@@ -204,8 +204,8 @@ PyODPS支持MaxCompute SQL查询，并可以读取执行的结果。
     入口对象的`execute_sql('statement')`和`run_sql('statement')`方法可以执行SQL语句，返回值请参见[任务实例](/intl.zh-CN/开发/PyODPS/基本操作/任务实例.md)。
 
     ```
-    odps.execute_sql('select * from dual')  #  同步的方式执行，会阻塞直到SQL执行完成。
-    instance = odps.run_sql('select * from dual')  # 异步的方式执行。
+    odps.execute_sql('select * from table_name')  #  同步的方式执行，会阻塞直到SQL执行完成。
+    instance = odps.run_sql('select * from table_name')  # 异步的方式执行。
     instance.wait_for_success()  # 阻塞直到完成。
     ```
 
@@ -216,7 +216,7 @@ PyODPS支持MaxCompute SQL查询，并可以读取执行的结果。
     -   SQL返回了结构化的数据。
 
         ```
-        with o.execute_sql('select * from dual').open_reader() as reader:
+        with o.execute_sql('select * from table_name').open_reader() as reader:
             for record in reader:
             # 处理每一个record。
         ```
@@ -224,7 +224,7 @@ PyODPS支持MaxCompute SQL查询，并可以读取执行的结果。
     -   SQL可能执行了`desc`命令，这时可以通过`reader.raw`取到原始的SQL执行结果。
 
         ```
-        with o.execute_sql('desc dual').open_reader() as reader:
+        with o.execute_sql('desc table_name').open_reader() as reader:
         print(reader.raw)
         ```
 
