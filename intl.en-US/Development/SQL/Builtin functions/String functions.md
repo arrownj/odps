@@ -711,7 +711,7 @@ This topic describes the string functions provided by MaxCompute, which can be u
 -   Examples
 
     ```
-    DELECT LTRIM(' abc ') FROM dual; 
+    SELECT LTRIM(' abc '); 
     -- Returned result:
     +-----+
     | _c0 |
@@ -744,7 +744,7 @@ This topic describes the string functions provided by MaxCompute, which can be u
 -   Examples
 
     ```
-    SELECT RTRIM('a abc ') FROM dual; 
+    SELECT RTRIM('a abc '); 
     -- Returned result: 
     +-----+
     | _c0 |
@@ -777,7 +777,7 @@ This topic describes the string functions provided by MaxCompute, which can be u
 -   Examples
 
     ```
-    SELECT REVERSE('abcedfg') FROM dual;--Returned result:
+    SELECT REVERSE('abcedfg');--Returned result:
     +-----+
     | _c0 |
     +-----+
@@ -808,7 +808,7 @@ This topic describes the string functions provided by MaxCompute, which can be u
 -   Examples
 
     ```
-    SELECT REPEAT('abc',5) FROM lxw_dual; -- Return abcabcabcabcabc.
+    SELECT REPEAT('abc',5); -- Return abcabcabcabcabc.
     ```
 
 
@@ -835,7 +835,7 @@ This topic describes the string functions provided by MaxCompute, which can be u
 -   Examples
 
     ```
-    SELECT ASCII('abcde') FROM dual; -- Return 97.
+    SELECT ASCII('abcde'); -- Return 97.
     ```
 
 
@@ -906,11 +906,17 @@ This section describes new string functions in MaxCompute V2.0.
     ```
 
 
-MaxCompute V2.0 provides additional date functions. If a function that you use in an SQL statement involves new data types, you must insert the following `set` statement before the SQL statement:
+MaxCompute V2.0 provides additional date functions. If the functions you are using involve new data types, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, or BINARY, run the following SET statement to enable these data types:
 
-```
-set odps.sql.type.system.odps2 = true; -- Enable new data types.
-```
+-   Session level: To use a new data type, you must insert `set odps.sql.type.system.odps2=true;` before the SQL statement, and commit and execute them together.
+-   Project level: The project owner can set the project as needed. It takes 10 to 15 minutes for the settings to take effect. Run the following command:
+
+    ```
+    setproject odps.sql.type.system.odps2=true;
+    ```
+
+    For more information about `setproject`, see [Project operations](/intl.en-US/Development/Common commands/Project operations.md). For the precautions you must take when you enable data types at the project level, see [Date types](/intl.en-US/Development/Data types/Data type editions.md).
+
 
 ## RPAD
 
@@ -940,11 +946,17 @@ set odps.sql.type.system.odps2 = true; -- Enable new data types.
     ```
 
 
-MaxCompute V2.0 provides additional date functions. If a function that you use in an SQL statement involves new data types, you must insert the following `set` statement before the SQL statement:
+MaxCompute V2.0 provides additional date functions. If the functions you are using involve new data types, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, or BINARY, run the following SET statement to enable these data types:
 
-```
-set odps.sql.type.system.odps2 = true; -- Enable new data types.
-```
+-   Session level: To use a new data type, you must insert `set odps.sql.type.system.odps2=true;` before the SQL statement, and commit and execute them together.
+-   Project level: The project owner can set the project as needed. It takes 10 to 15 minutes for the settings to take effect. Run the following command:
+
+    ```
+    setproject odps.sql.type.system.odps2=true;
+    ```
+
+    For more information about `setproject`, see [Project operations](/intl.en-US/Development/Common commands/Project operations.md). For the precautions you must take when you enable data types at the project level, see [Date types](/intl.en-US/Development/Data types/Data type editions.md).
+
 
 ## REPLACE
 
@@ -1031,11 +1043,17 @@ set odps.sql.type.system.odps2 = true; -- Enable new data types.
     ```
 
 
-MaxCompute V2.0 provides additional date functions. If a function that you use in an SQL statement involves new data types, you must insert the following `set` statement before the SQL statement:
+MaxCompute V2.0 provides additional date functions. If the functions you are using involve new data types, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, or BINARY, run the following SET statement to enable these data types:
 
-```
-set odps.sql.type.system.odps2 = true; -- Enable new data types.
-```
+-   Session level: To use a new data type, you must insert `set odps.sql.type.system.odps2=true;` before the SQL statement, and commit and execute them together.
+-   Project level: The project owner can set the project as needed. It takes 10 to 15 minutes for the settings to take effect. Run the following command:
+
+    ```
+    setproject odps.sql.type.system.odps2=true;
+    ```
+
+    For more information about `setproject`, see [Project operations](/intl.en-US/Development/Common commands/Project operations.md). For the precautions you must take when you enable data types at the project level, see [Date types](/intl.en-US/Development/Data types/Data type editions.md).
+
 
 ## URL\_ENCODE
 
