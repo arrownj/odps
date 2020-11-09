@@ -83,11 +83,11 @@ MaxCompute 2.0版本升级后，Java UDF支持的数据类型从原来的BIGINT�
 
 ## UDF
 
-实现UDF需要继承`com.aliyun.odps.udf.UDF`类，并实现`evaluate`方法。`evaluate`方法必须是非静态的Public方法 。`evaluate`方法的参数和返回值数据类型将作为SQL中UDF的函数签名。您可以在UDF中实现多个`evaluate`方法，在调用UDF时，框架会依据UDF调用的参数类型匹配正确的`evaluate`方法 。
+实现UDF需要继承`com.aliyun.odps.udf.UDF`类，并实现`evaluate`方法。`evaluate`方法必须是非静态的Public方法。`evaluate`方法的参数和返回值数据类型将作为SQL中UDF的函数签名。您可以在UDF中实现多个`evaluate`方法，在调用UDF时，框架会依据UDF调用的参数类型匹配正确的`evaluate`方法 。
 
 **说明：**
 
--   不同的Jar包中最好不要有类名相同但实现功能逻辑不一样的类。例如`UDF(UDAF/UDTF)： udf1、udf2`分别对应资源`udf1.jar`、`udf2.jar`。如果两个Jar包里都包含一个`com.aliyun.UserFunction.class`类，当同一个SQL中同时使用到这两个UDF时，系统会随机加载其中一个类，导致UDF执行行为不一致，甚至编译失败。
+-   不同的JAR包中最好不要有类名相同但实现功能逻辑不一样的类。例如`UDF(UDAF/UDTF)： udf1、udf2`分别对应资源`udf1.jar、``udf2.jar`。如果两个JAR包里都包含一个`com.aliyun.UserFunction.class`类，当同一个SQL中同时使用到这两个UDF时，系统会随机加载其中一个类，导致UDF执行行为不一致，甚至编译失败。
 -   如果1个SQL中同时使用2个UDF，执行时2个UDF会共享一个Classpath，不会隔离。如果2个UDF引用的资源都包含同一个Class，则Classloader会引用哪个Class是不确定的。因此，请尽量避免在不同的资源中使用同一个Class。
 
 可以通过实现`void setup(ExecutionContext ctx)`和`void close()`来分别实现UDF的初始化和结束代码。
@@ -184,7 +184,7 @@ public abstract class Aggregator implements ContextFunction {
 
 ![](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/7882659951/p1855.jpg)
 
-在上图中，输入数据被按照一定的大小进行分片（详情请参见 [MapReduce](/cn.zh-CN/开发/MapReduce/概要/MapReduce概述.md)），每片的大小适合一个Worker在适当的时间内完成。分片大小的设置需要您手动配置完成。
+在上图中，输入数据被按照一定的大小进行分片（详情请参见[MapReduce](/cn.zh-CN/开发/MapReduce/概要/MapReduce概述.md)），每片的大小适合一个Worker在适当的时间内完成。分片大小的设置需要您手动配置完成。
 
 UDAF的计算过程分为两个阶段：
 
@@ -277,7 +277,7 @@ public class MyConcat extends UDF {
 -   `merge()`方法：将不同的Map直接结算的结果进行汇总。
 -   `terminate()`方法：返回数据。
 -   `newBuffer()`方法：创建初始返回结果的值。
--   Writable的`readFields`方法， 由于partial的`writable`对象是重用的，同一个对象的`readFields`方法会被调用多次。该方法每次调用的时候重置整个对象，如果对象中包含`Collection`，则需要清空。
+-   Writable的`readFields`方法，由于partial的`writable`对象是重用的，同一个对象的`readFields`方法会被调用多次。该方法每次调用的时候重置整个对象，如果对象中包含`Collection`，则需要清空。
 -   UDAF在SQL中的使用语法与普通的内建聚合函数相同，详情请参见[聚合函数](/cn.zh-CN/开发/SQL及函数/内建函数/聚合函数.md)。
 -   运行UDTF的方法与UDF类似，详情请参见[运行 UDF](/cn.zh-CN/快速入门/开发Java UDF（可选）.md)。
 -   STRING对应的Writable类型为Text。
@@ -295,7 +295,7 @@ Java UDTF需要继承`com.aliyun.odps.udf.UDTF`类。这个类需要实现4个�
 
 示例
 
-1.  UDTF 的程序示例，如下所示。
+1.  UDTF的程序示例，如下所示。
 
     ```
     package org.alidata.odps.udtf.examples;
@@ -354,7 +354,7 @@ Java UDTF需要继承`com.aliyun.odps.udf.UDTF`类。这个类需要实现4个�
 
 在UDTF中，您可以读取MaxCompute的[资源](/cn.zh-CN/产品简介/基本概念/资源.md)。利用UDTF读取MaxCompute资源的示例如下所示：
 
-1.  编写UDTF程序，编译成功后导出Jar包（udtfexample1.jar）。
+1.  编写UDTF程序，编译成功后导出JAR包（udtfexample1.jar）。
 
     ```
     package com.aliyun.odps.examples.udf;
@@ -531,7 +531,7 @@ public class Collect extends GenericUDF {
     -   [DeveloperGuide UDTF](https://cwiki.apache.org/confluence/display/Hive/DeveloperGuide+UDTF)
     -   [GenericUDAFCaseStudy](https://cwiki.apache.org/confluence/display/Hive/GenericUDAFCaseStudy)
 
-上述UDF可以将任意类型、数量的参数打包成ARRAY输出。假设输出Jar包名为`test.jar`。
+上述UDF可以将任意类型、数量的参数打包成ARRAY输出。假设输出JAR包名为`test.jar`。
 
 ```
 --添加资源。
@@ -540,7 +540,7 @@ Add jar test.jar;
 CREATE FUNCTION hive_collect as 'com.aliyun.odps.compiler.hive.Collect' using 'test.jar';
 --使用function。
 set odps.sql.hive.compatible=true;
-select hive_collect(4y,5y,6y) from dual;
+select hive_collect(4y,5y,6y);
 +------+
 | _c0  |
 +------+
@@ -550,7 +550,7 @@ select hive_collect(4y,5y,6y) from dual;
 
 使用兼容Hive的UDF需要注意以下几点：
 
--   创建UDF时需要指定Jar包，无法自动将所有Jar包加入Classpath。
+-   创建UDF时需要指定JAR包，无法自动将所有JAR包加入Classpath。
 
     **说明：** MaxCompute的`add jar`命令会永久地在Project中创建一个资源。
 
