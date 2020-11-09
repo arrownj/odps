@@ -33,7 +33,7 @@ This topic describes the date functions provided by MaxCompute, which can be use
         -   If the DATEADD function adds an interval specified by `delta` to the month part of a date value and this operation does not cause an overflow of `day`, keep `day` unchanged. Otherwise, set `day` to the last day of the target month.
     -   datepart: the part you want to modify in the date value. The value is a constant of the STRING type. For example, `dd` indicates a day. An error is returned if the value is in an invalid format or is not a constant of the STRING type.
 
-        The value of this parameter is specified in compliance with the rules of data type conversion between STRING and DATETIME values. That is, the value yyyy indicates that the DATEADD function adds an interval to the year part of the date value, whereas the value mm indicates that the DATEADD function adds an interval to the month part of the date value. For more information about the rules of data type conversion, see [Data type conversion](/intl.en-US/Development/SQL/Data type conversion.md). Extended date formats are also supported, such as `-year`, `-month`, `-mon`, `-day`, and `-hour`.
+        The value of this parameter is specified in compliance with the rules of data type conversion between STRING and DATETIME values. That is, the value yyyy indicates that the DATEADD function adds an interval to the year part of the date value, whereas the value mm indicates that the DATEADD function adds an interval to the month part of the date value. For more information about the rules of data type conversion, see [Type conversion](/intl.en-US/Development/SQL/Data type conversion.md). Extended date formats are also supported, such as `-year`, `-month`, `-mon`, `-day`, and `-hour`.
 
 -   Return value
 
@@ -434,7 +434,7 @@ This topic describes the date functions provided by MaxCompute, which can be use
 -   Example
 
     ```
-    select weekofyear(to_date("20141229", "yyyymmdd")) from dual;  
+    select weekofyear(to_date("20141229", "yyyymmdd"));  
     -- Return result:
     +------------+
     | _c0        |
@@ -442,8 +442,8 @@ This topic describes the date functions provided by MaxCompute, which can be use
     | 1          |
     +------------+
     -- 20141229 indicates that the year is 2014, but most days of the week fall in year 2015. Therefore, the return value 1 indicates the first week of 2015.    
-    select weekofyear(to_date("20141231", "yyyymmdd")) from dual; -- The return value is 1.  
-    select weekofyear(to_date("20151229", "yyyymmdd")) from dual; -- The return value is 53.
+    select weekofyear(to_date("20141231", "yyyymmdd")); -- The return value is 1.  
+    select weekofyear(to_date("20151229", "yyyymmdd")); -- The return value is 53.
     ```
 
 
@@ -711,7 +711,7 @@ MaxCompute V2.0 provides additional date functions. If the functions you are usi
 -   Example
 
     ```
-    select current_timestamp() from dual; -- The return value is '2017-08-03 11:50:30.661'.
+    select current_timestamp(); -- The return value is '2017-08-03 11:50:30.661'.
     ```
 
 
