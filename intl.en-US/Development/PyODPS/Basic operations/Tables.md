@@ -21,7 +21,7 @@ A table is the data storage unit in MaxCompute. For more information, see [Table
 -   Obtain a specific table by calling the `get_table()` method of a MaxCompute entry object.
 
     ```
-    t = o.get_table('dual')
+    t = o.get_table('table_name')
     t.schema
     odps.Schema {
       c_int_a                 bigint
@@ -44,7 +44,7 @@ A table is the data storage unit in MaxCompute. For more information, see [Table
     t.size
     1408
     t.comment
-    'Dual Table Comment'
+    'table_name Table Comment'
     t.schema.columns
     [<column c_int_a, type bigint>,
      <column c_int_b, type bigint>,
@@ -65,7 +65,7 @@ A table is the data storage unit in MaxCompute. For more information, see [Table
     You can obtain tables across projects by specifying the `project` parameter.
 
     ```
-    t = o.get_table('dual', project='other_project')
+    t = o.get_table('table_name', project='other_project')
     ```
 
 
@@ -264,7 +264,7 @@ You can use one of the following methods to obtain data from a table:
 -   Call the `head()` method to obtain less than 10,000 data records from the beginning of a table.
 
     ```
-    t = o.get_table('dual')
+    t = o.get_table('table_name')
     # Process each record.
     for record in t.head(3):
     ```
