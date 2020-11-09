@@ -39,13 +39,13 @@ MaxCompute SQL uses the backlash character \(\\\) as an escape character for the
 -   Use an escape sequence to represent a special character. For example, run the following command:
 
     ```
-    select length('a\tb') from dual;
+    select length('a\tb');
     ```
 
     The preceding command returns 3, which indicates that the string contains three characters and that `\t` is treated as one character.
 
     ```
-    select 'a\ab',length('a\ab') from dual;
+    select 'a\ab',length('a\ab');
     ```
 
     The preceding command returns aab, 3, which indicates that `\a` is treated as letter a.
