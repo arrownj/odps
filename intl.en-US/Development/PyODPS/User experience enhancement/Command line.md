@@ -16,16 +16,16 @@ After you configure an account, you do not need to enter the account information
     >>> setup('**your-access_id**', '**your-access-key**', '**your-project**', endpoint='**your-endpoint**')
     ```
 
-    **Note:** If you do not specify the `room` parameter, the `default` `room` is used.
+    **Note:** If you do not specify the `room` parameter, the `default``room` is used.
 
 3.  Call the enter method to create a room object on any Python interactive interface.
 
     ```
     >>> room = enter()
     >>> o = room.odps
-    >>> o.get_table('dual')
+    >>> o.get_table('table_name')
     odps.Table
-      name: odps_test_sqltask_finance.`dual`
+      name: odps_test_sqltask_finance.`table_name`
       schema:
         c_int_a                 : bigint
         c_int_b                 : bigint
@@ -47,7 +47,7 @@ After you configure an account and call objects, you can store, retrieve, or del
 -   You can store commonly used MaxCompute tables or resources in the `room`.
 
     ```
-    >>> room.store('stored-table', o.get_table('dual'), desc='Simple stored table example')
+    >>> room.store('stored-table', o.get_table('table_name'), desc='Simple stored table example')
     ```
 
     You can call the `display` method to display the stored objects as a table.
@@ -64,7 +64,7 @@ After you configure an account and call objects, you can store, retrieve, or del
     ```
     >>> room['stored-table']
     odps.Table
-      name: odps_test_sqltask_finance.`dual`
+      name: odps_test_sqltask_finance.`table_name`
       schema:
         c_int_a                 : bigint
         c_int_b                 : bigint
