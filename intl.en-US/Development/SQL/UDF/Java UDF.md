@@ -182,7 +182,7 @@ The following figure illustrates the implementation logic and calculation proced
 
 ![](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/9782659951/p1855.jpg)
 
-In the preceding figure, the input data is sliced according to the specified size. \(For more information, see [MapReduce](/intl.en-US/Development/MapReduce/Summary/MapReduce.md)\). The size of each slice is suitable for a worker to complete in a specified time. The slice size must be manually configured.
+In the preceding figure, the input data is sliced according to the specified size. \(For more information, see [MapReduce](/intl.en-US/Development/MapReduce/Summary/Overview.md)\). The size of each slice is suitable for a worker to complete in a specified time. The slice size must be manually configured.
 
 The calculation procedure of a UDAF involves two steps:
 
@@ -538,7 +538,7 @@ Add jar test.jar;
 CREATE FUNCTION hive_collect as 'com.aliyun.odps.compiler.hive.Collect' using 'test.jar';
 -- Use the function.
 set odps.sql.hive.compatible=true;
-select hive_collect(4y,5y,6y) from dual;
+select hive_collect(4y,5y,6y);
 +------+
 | _c0  |
 +------+
