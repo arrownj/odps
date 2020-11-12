@@ -389,7 +389,7 @@ create table t (a bigint) partitioned by (ds string);
 
 ## order.by.col.ambiguous
 
-**select list中alias重复，之后的rrder by子句引用到重复的alias的问题。**
+**select list中alias重复，之后的order by子句引用到重复的alias的问题。**
 
 错误写法：
 
