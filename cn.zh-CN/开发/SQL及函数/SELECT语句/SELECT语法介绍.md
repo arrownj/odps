@@ -107,7 +107,7 @@ SELECT * FROM (SELECT region FROM sale_detail) t WHERE region = 'shanghai';
 
 |过滤条件|描述|
 |:---|:-|
-|\> 、 < 、 =、 \>=、 <=、 <\>|关系操作符。|
+|\>、<、=、\>=、<=、<\>|关系操作符。|
 |LIKE、RLIKE|LIKE和RLIKE的Source和Pattern参数均仅接受STRING类型。|
 |IN、NOT IN|如果在IN\|NOT IN条件后加子查询，子查询只能返回一列值，且返回值的数量不能超过1000。|
 |BETWEEN…AND|限定查询范围。|
@@ -125,7 +125,7 @@ SELECT * FROM (SELECT region FROM sale_detail) t WHERE region = 'shanghai';
 
     **说明：** 您可以通过`EXPLAIN SELECT`语句查看分区裁剪是否生效。普通的UDF或`JOIN`的分区条件写法都有可能导致分区裁剪不生效，详情请参见[分区剪裁合理性评估](/cn.zh-CN/最佳实践/SQL/分区剪裁合理性评估.md)。
 
--   UDF支持分区裁剪。支持的方式是将UDF语句先当作一个小作业执行，再将执行的结果替换到原来UDF出现的位置 。实现的方式有以下两种：
+-   UDF支持分区裁剪。支持的方式是将UDF语句先当作一个小作业执行，再将执行的结果替换到原来UDF出现的位置。实现的方式有以下两种：
     -   在编写UDF的时候，UDF类上加入Annotation。
 
         ```
@@ -256,9 +256,23 @@ SELECT region, total_price FROM sale_detail GROUP BY region, total_price;
 
 -   `ORDER BY|DISTRIBUTE BY|SORT BY`的取值必须是`SELECT`语句的输出列，即列的别名。列的别名可以为中文。
 -   在MaxCompute SQL解析中，`ORDER BY|DISTRIBUTE BY|SORT BY`在`SELECT`操作之后，因此它们的取值只能为`SELECT`语句的输出列。
--   `ORDER BY`不和`DISTRIBUTE BY`、`SORT BY`同时使用，同时`GROUP BY`也不和`DISTRIBUTE BY``SORT BY`同时使用。
+-   `ORDER BY`不和`DISTRIBUTE BY`、`SORT BY`同时使用，同时`GROUP BY`也不和`DISTRIBUTE BY`、`SORT BY`同时使用。
 
 ## LIMIT NUMBER限制输出行数
 
-`LIMIT number`中的`number`是常数，限制输出行数。当使用无`LIMIT`的`SELECT`语句直接从屏幕输出查看结果时，最多只输出10000行。每个项目空间的这个屏显最大限制可能不同，您可以通过`setproject`命令控制。
+`LIMIT number`中的`number`是常数，限制输出行数。
+
+**屏显限制说明**
+
+当使用无`LIMIT`的`SELECT`语句或`LIMIT`的`number`数量超过设置的屏显上限时，如果您直接从屏显窗口查看结果，最多只能输出屏显上限设置的行数。
+
+每个项目空间的屏显上限可能不同，您可以参考如下方法控制：
+
+-   如果关闭了项目空间数据保护，修改odpscmd config.ini文件。
+
+    设置odpscmd config.ini文件中的`use_instance_tunnel=true`，如果不配置`instance_tunnel_max_record`参数，则屏显行数不受限制；否则，屏显行数受`instance_tunnel_max_record`参数值限制。`instance_tunnel_max_record`参数值上限为10000行。Instance Tunnel详情请参见[Tunnel命令使用说明](/cn.zh-CN/开发/数据上传下载/使用Tunnel命令上传下载数据/Tunnel命令使用说明.md)。
+
+-   如果开启了项目空间数据保护，屏显行数受`READ_TABLE_MAX_ROW`参数值限制，配置上限为10000行。
+
+**说明：** 您可以执行`show SecurityConfiguration;`命令查看`ProjectProtection`属性配置。如果`ProjectProtection=true`，根据项目空间数据保护需求判断是否关闭数据保护机制。如果可以关闭，通过`set ProjectProtection=false;`命令关闭。`ProjectProtection`属性默认不开启。项目空间数据保护机制详情请参见[项目空间的数据保护](/cn.zh-CN/管理/安全管理详解/项目空间的数据保护.md)。
 
