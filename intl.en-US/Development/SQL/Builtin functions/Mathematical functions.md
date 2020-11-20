@@ -4,23 +4,67 @@ keyword: mathematical function
 
 # Mathematical functions
 
-This topic describes the mathematical functions supported by MaxCompute SQL.
+MaxCompute SQL provides common mathematical functions that you can use for development. You can select mathematical functions as needed for data computing and data type conversions. This topic describes the syntax, parameters, and examples of mathematical functions supported by MaxCompute SQL.
+
+The following table lists mathematical functions supported by MaxCompute SQL.
+
+|Function|Description|
+|--------|-----------|
+|[ABS](#section_i1v_5lm_vdb)|Calculates the absolute value.|
+|[ACOS](#section_cfp_qmm_vdb)|Calculates the arccosine.|
+|[ASIN](#section_fau_d9e_7p5)|Calculates the arcsine.|
+|[ATAN](#section_odw_jnm_vdb)|Calculates the arctangent.|
+|[CEIL](#section_ugm_k4m_vdb)|Rounds up a number and returns the nearest integer.|
+|[CONV](#section_tkx_q4m_vdb)|Converts a number from one number system to another.|
+|[COS](#section_tpy_z4m_vdb)|Calculates the cosine.|
+|[COSH](#section_tnp_gpm_vdb)|Calculates the hyperbolic cosine.|
+|[COT](#section_hhz_lpm_vdb)|Calculates the cotangent.|
+|[EXP](#section_q1n_rpm_vdb)|Calculates the exponential value.|
+|[FLOOR](#section_yrw_wpm_vdb)|Rounds down a number and returns the nearest integer.|
+|[LN](#section_pdm_fqm_vdb)|Calculates the natural logarithm.|
+|[LOG](#section_iwc_4qm_vdb)|Calculates the logarithm.|
+|[POW](#section_gmv_wqm_vdb)|Calculates the nth power of a value.|
+|[RAND](#section_qlv_2rm_vdb)|Returns a random number.|
+|[ROUND](#section_ocf_jrm_vdb)|Returns a value rounded to the specified decimal place.|
+|[SIN](#section_tky_gvm_vdb)|Calculates the sine.|
+|[SINH](#section_ccf_gym_vdb)|Calculates the hyperbolic sine.|
+|[SQRT](#section_nns_lym_vdb)|Calculates the square root.|
+|[TAN](#section_ibd_rym_vdb)|Calculates the tangent.|
+|[TANH](#section_pfh_wym_vdb)|Calculates the hyperbolic tangent.|
+|[TRUNC](#section_yly_1zm_vdb)|Truncates the input value of a number and right-fills it with zeros from the specified position.|
+|[LOG2](#section_dh3_tzm_vdb)|Calculates the logarithm of a number with the base number of 2.|
+|[LOG10](#section_bjc_zzm_vdb)|Calculates the logarithm of a number with the base number of 10.|
+|[BIN](#section_ucn_21n_vdb)|Calculates the binary code.|
+|[HEX](#section_nxv_j1n_vdb)|Converts an integer or a string into a hexadecimal number.|
+|[UNHEX](#section_k5x_51n_vdb)|Converts a hexadecimal string into a string.|
+|[RADIANS](#section_dwg_1bn_vdb)|Converts a degree to a radian value.|
+|[DEGREES](#section_adl_hbn_vdb)|Converts a radian value to a degree.|
+|[SIGN](#section_gq5_lbn_vdb)|Returns the sign of the input value.|
+|[E](#section_yfc_zbn_vdb)|Calculates the value of e.|
+|[PI](#section_hhc_dcn_vdb)|Calculates the value of π.|
+|[FACTORIAL](#section_umk_gcn_vdb)|Calculates the factorial.|
+|[CBRT](#section_frl_lcn_vdb)|Calculates the cube root.|
+|[SHIFTLEFT](#section_k4z_pcn_vdb)|Shifts a value left by a specific number of places.|
+|[SHIFTRIGHT](#section_iyl_vcn_vdb)|Shifts a value right by a specific number of places.|
+|[SHIFTRIGHTUNSIGNED](#section_h2f_1dn_vdb)|Shifts an unsigned value right by a specific number of places.|
+|[FORMAT\_NUMBER](#section_tpw_bk9_iwh)|Converts a number to a string in the specified format.|
+|[WIDTH\_BUCKET](#section_pn8_ilh_3ll)|Returns the ID of the bucket into which the value of a specific expression falls.|
 
 ## ABS
 
 -   Syntax
 
     ```
-    Double abs(Double number)
-    Bigint abs(Bigint number)
-    Decimal abs(Decimal number)
+    DOUBLE ABS(DOUBLE number)
+    BIGINT ABS(BIGINT number)
+    DECIMAL ABS(DECIMAL number)
     ```
 
 -   Description
 
-    Calculates the absolute value of number.
+    This function calculates the absolute value of number.
 
--   Parameter
+-   Parameters
 
     number: If number is of the DOUBLE, BIGINT, or DECIMAL type, a value of the same type is returned.
 
@@ -29,7 +73,7 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
     -   If number is of the DECIMAL type, the return value must be of the DECIMAL type.
     -   If number is of the STRING type, it is implicitly converted to a value of the DOUBLE type before calculation.
     -   If number is of a data type other than the preceding four types, an error is returned.
-    **Note:** If number of the BIGINT type exceeds the upper limit, a value of the DOUBLE type is returned. However, the precision may be lost.
+    **Note:** If number is of the BIGINT type and is greater than the maximum value of the BIGINT type, a value of the DOUBLE type is returned. However, the precision may be lost.
 
 -   Return value
 
@@ -38,18 +82,18 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Examples
 
     ```
-    abs(null)=null
-    abs(-1)=1
-    abs(-1.2)=1.2
-    abs("-2")=2.0
-    abs(122320837456298376592387456923748)=1.2232083745629837e32
+    ABS(null)=null
+    ABS(-1)=1
+    ABS(-1.2)=1.2
+    ABS("-2")=2.0
+    ABS(122320837456298376592387456923748)=1.2232083745629837e32
     ```
 
-    The following example shows the usage of a complete ABS function in SQL statements. Other built-in functions, except window functions and aggregation functions, are used in a similar way.
+    The following example shows the usage of an ABS function in SQL statements. Other built-in functions, except window functions and aggregate functions, are used in a similar way.
 
     ```
     -- Calculate the absolute value of the id field in tbl1.
-    select abs(id) from tbl1;
+    SELECT ABS(id) FROM tbl1;
     ```
 
 
@@ -58,27 +102,27 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Syntax
 
     ```
-    Double acos(Double number)
-    Decimal acos(Decimal number)
+    DOUBLE ACOS(DOUBLE number)
+    DECIMAL ACOS(DECIMAL number)
     ```
 
 -   Description
 
-    Calculates the arccosine of number.
+    This function calculates the arccosine of number.
 
--   Parameter
+-   Parameters
 
     number: a value of the DOUBLE or DECIMAL type. The value ranges from -1 to 1. If the input value is of the STRING or BIGINT type, it is implicitly converted to a value of the DOUBLE type before calculation. If the input value is of another data type, an error is returned.
 
 -   Return value
 
-    A value of the DOUBLE or DECIMAL type is retuned. The value ranges from 0 to π. If the input value is NULL, NULL is returned.
+    A value of the DOUBLE or DECIMAL type is returned. The value ranges from 0 to π. If the input value is NULL, NULL is returned.
 
 -   Examples
 
     ```
-    acos("0.87")=0.5155940062460905
-    acos(0)=1.5707963267948966
+    ACOS("0.87")=0.5155940062460905
+    ACOS(0)=1.5707963267948966
     ```
 
 
@@ -87,15 +131,15 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Syntax
 
     ```
-    Double asin(Double number)
-    Decimal asin(Decimal number)
+    DOUBLE ASIN(DOUBLE number)
+    DECIMAL ASIN(DECIMAL number)
     ```
 
 -   Description
 
-    Calculates the arcsine of number.
+    This function calculates the arcsine of number.
 
--   Parameter
+-   Parameters
 
     number: a value of the DOUBLE or DECIMAL type. The value ranges from -1 to 1. If the input value is of the STRING or BIGINT type, it is implicitly converted to a value of the DOUBLE type before calculation. If the input value is of another data type, an error is returned.
 
@@ -106,8 +150,8 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Examples
 
     ```
-    asin(1)=1.5707963267948966
-    asin(-1)=-1.5707963267948966
+    ASIN(1)=1.5707963267948966
+    ASIN(-1)=-1.5707963267948966
     ```
 
 
@@ -116,14 +160,14 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Syntax
 
     ```
-    Double atan(Double number)
+    DOUBLE ATAN(DOUBLE number)
     ```
 
 -   Description
 
-    Calculates the arctangent of number.
+    This function calculates the arctangent of number.
 
--   Parameter
+-   Parameters
 
     number: a value of the DOUBLE type. If the input value is of the STRING or BIGINT type, it is implicitly converted to a value of the DOUBLE type before calculation. If the input value is of another data type, an error is returned.
 
@@ -134,8 +178,8 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Examples
 
     ```
-    atan(1)=0.7853981633974483
-    atan(-1)=-0.7853981633974483
+    ATAN(1)=0.7853981633974483
+    ATAN(-1)=-0.7853981633974483
     ```
 
 
@@ -144,17 +188,17 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Syntax
 
     ```
-    Bigint ceil(Double value)
-    Bigint ceil(Decimal value)
+    BIGINT CEIL(DOUBLE value)
+    BIGINT CEIL(DECIMAL value)
     ```
 
 -   Description
 
-    Rounds up value and returns the nearest integer.
+    This function rounds up value and returns the nearest integer.
 
--   Parameter
+-   Parameters
 
-    value: The value must be of the DOUBLE or DECIMAL type. If the input value is of the STRING or BIGINT type, it is implicitly converted to a value of the DOUBLE type before calculation. If the input value is of another data type, an error is returned.
+    value: a value of the DOUBLE or DECIMAL type. If the input value is of the STRING or BIGINT type, it is implicitly converted to a value of the DOUBLE type before calculation. If the input value is of another data type, an error is returned.
 
 -   Return value
 
@@ -163,8 +207,8 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Examples
 
     ```
-    ceil(1.1)=2
-    ceil(-1.1)=-1
+    CEIL(1.1)=2
+    CEIL(-1.1)=-1
     ```
 
 
@@ -173,27 +217,27 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Syntax
 
     ```
-    String conv(String input, Bigint from_base, Bigint to_base)
+    STRING CONV(STRING input, BIGINT from_base, BIGINT to_base)
     ```
 
 -   Description
 
-    Converts a number from one number system to another.
+    This function converts a number from one number system to another.
 
 -   Parameters
-    -   input: the integer you want to convert, which is of the STRING type. Implicit conversions between the BIGINT and DOUBLE types are supported.
-    -   from\_base and to\_base: decimal numbers. The values can be 2, 8, 10, or 16. Implicit conversions between the STRING and DOUBLE types are supported.
+    -   input: the integer you want to convert, which is of the STRING type. If the input value is of the BIGINT or DOUBLE type, it is implicitly converted to a value of the STRING type before calculation.
+    -   from\_base and to\_base: decimal numbers. The values can be 2, 8, 10, or 16. If the input value is of the STRING or DOUBLE type, it is implicitly converted to a value of the BIGINT type before calculation.
 -   Return value
 
-    A value of the STRING type is returned. If any input value is NULL, NULL is returned. The conversion process runs at 64-bit precision. An error is returned if an overflow occurs. If the input value is a negative value that begins with an en dash \(-\), an error is returned. If the input value is a decimal, it is converted to an integer before the conversion of number systems. The decimal part is left out.
+    A value of the STRING type is returned. If any input value is NULL, NULL is returned. The conversion process runs at 64-bit precision. If an overflow occurs, an error is returned. If the input value is a negative value that begins with an en dash \(-\), an error is returned. If the input value is a decimal, it is converted to an integer before the conversion of number systems. The decimal part is left out.
 
 -   Examples
 
     ```
-    conv('1100', 2, 10)='12'
-    conv('1100', 2, 16)='c'
-    conv('ab', 16, 10)='171'
-    conv('ab', 16, 16)='ab'
+    CONV('1100', 2, 10)='12'
+    CONV('1100', 2, 16)='c'
+    CONV('ab', 16, 10)='171'
+    CONV('ab', 16, 16)='ab'
     ```
 
 
@@ -202,15 +246,15 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Syntax
 
     ```
-    Double cos(Double number)
-    Decimal cos(Decimal number)
+    DOUBLE COS(DOUBLE number)
+    DECIMAL COS(DECIMAL number)
     ```
 
 -   Description
 
-    Calculates the cosine of number, which is a radian value.
+    This function calculates the cosine of number, which is a radian value.
 
--   Parameter
+-   Parameters
 
     number: a value of the DOUBLE or DECIMAL type. If the input value is of the STRING or BIGINT type, it is implicitly converted to a value of the DOUBLE type before calculation. If the input value is of another data type, an error is returned.
 
@@ -221,8 +265,8 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Examples
 
     ```
-    cos(3.1415926/2)=2.6794896585028633e-8
-    cos(3.1415926)=-0.9999999999999986
+    COS(3.1415926/2)=2.6794896585028633e-8
+    COS(3.1415926)=-0.9999999999999986
     ```
 
 
@@ -231,15 +275,15 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Syntax
 
     ```
-    Double cosh(Double number)
-    Decimal cosh(Decimal number)
+    DOUBLE COSH(DOUBLE number)
+    DECIMAL COSH(DECIMAL number)
     ```
 
 -   Description
 
-    Calculates the hyperbolic cosine of number.
+    This function calculates the hyperbolic cosine of number.
 
--   Parameter
+-   Parameters
 
     number: a value of the DOUBLE or DECIMAL type. If the input value is of the STRING or BIGINT type, it is implicitly converted to a value of the DOUBLE type before calculation. If the input value is of another data type, an error is returned.
 
@@ -253,15 +297,15 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Syntax
 
     ```
-    Double cot(Double number)
-    Decimal cot(Decimal number)
+    DOUBLE COT(DOUBLE number)
+    DECIMAL COT(DECIMAL number)
     ```
 
 -   Description
 
-    Calculates the cotangent of number, which is a radian value.
+    This function calculates the cotangent of number, which is a radian value.
 
--   Parameter
+-   Parameters
 
     number: a value of the DOUBLE or DECIMAL type. If the input value is of the STRING or BIGINT type, it is implicitly converted to a value of the DOUBLE type before calculation. If the input value is of another data type, an error is returned.
 
@@ -275,21 +319,21 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Syntax
 
     ```
-    Double exp(Double number)
-    Decimal exp(Decimal number)
+    DOUBLE EXP(DOUBLE number)
+    DECIMAL EXP(DECIMAL number)
     ```
 
 -   Description
 
-    Calculates the exponential value of number.
+    This function calculates the exponential value of number.
 
--   Parameter
+-   Parameters
 
     number: a value of the DOUBLE or DECIMAL type. If the input value is of the STRING or BIGINT type, it is implicitly converted to a value of the DOUBLE type before calculation. If the input value is of another data type, an error is returned.
 
 -   Return value
 
-    The exponential value of number is returned. A value of the DOUBLE or DECIMAL type is returned. If the input value is NULL, NULL is returned.
+    The exponential value of number is returned. The value is of the DOUBLE or DECIMAL type. If the input value is NULL, NULL is returned.
 
 
 ## FLOOR
@@ -297,15 +341,15 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Syntax
 
     ```
-    Bigint floor(Double number)
-    Bigint floor(Decimal number)
+    BIGINT FLOOR(DOUBLE number)
+    BIGINT FLOOR(DECIMAL number)
     ```
 
 -   Description
 
-    Rounds down number and returns the nearest integer.
+    This function rounds down number and returns the nearest integer that is no greater than the value of number.
 
--   Parameter
+-   Parameters
 
     number: a value of the DOUBLE or DECIMAL type. If the input value is of the STRING or BIGINT type, it is implicitly converted to a value of the DOUBLE type before calculation. If the input value is of another data type, an error is returned.
 
@@ -316,13 +360,13 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Examples
 
     ```
-    floor(1.2)=1
-    floor(1.9)=1
-    floor(0.1)=0
-    floor(-1.2)=-2
-    floor(-0.1)=-1
-    floor(0.0)=0
-    floor(-0.0)=0
+    FLOOR(1.2)=1
+    FLOOR(1.9)=1
+    FLOOR(0.1)=0
+    FLOOR(-1.2)=-2
+    FLOOR(-0.1)=-1
+    FLOOR(0.0)=0
+    FLOOR(-0.0)=0
     ```
 
 
@@ -331,20 +375,20 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Syntax
 
     ```
-    Double ln(Double number)
-    Decimal ln(Decimal number)
+    DOUBLE LN(DOUBLE number)
+    DECIMAL LN(DECIMAL number)
     ```
 
 -   Description
 
-    Returns the natural logarithm of number.
+    This function calculates the natural logarithm of number.
 
--   Parameter
+-   Parameters
 
     number: a value of the DOUBLE or DECIMAL type.
 
     -   If the input value is of the STRING or BIGINT type, it is implicitly converted to a value of the DOUBLE type before calculation. If the input value is of another data type, an error is returned.
-    -   If the input value is NULL, NULL is returned. If the input value is negative or 0, an error is returned.
+    -   If the input value is NULL, NULL is returned. If the input value is a negative value or 0, an error is returned.
 -   Return value
 
     A value of the DOUBLE or DECIMAL type is returned.
@@ -355,13 +399,13 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Syntax
 
     ```
-    Double log(Double base, Double x)
-    Decimal log(Decimal base, Decimal x)
+    DOUBLE LOG(DOUBLE base, DOUBLE x)
+    DECIMAL LOG(DECIMAL base, DECIMAL x)
     ```
 
 -   Description
 
-    Returns the logarithm of x whose base number is base.
+    This function calculates the logarithm of x whose base number is base.
 
 -   Parameters
     -   base: the base value, which is of the DOUBLE or DECIMAL type. If the input value is of the STRING or BIGINT type, it is implicitly converted to a value of the DOUBLE type before calculation. If the input value is of another data type, an error is returned.
@@ -371,21 +415,21 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
     The logarithm value of the DOUBLE or DECIMAL type is returned.
 
     -   If any input value is NULL, NULL is returned.
-    -   If any input value is negative or 0, an error is returned.
-    -   If the value of base is 1, which causes division by 0, an error is returned.
+    -   If any input value is a negative value or 0, an error is returned.
+    -   If the value of base is 1, an error is returned. The value 1 causes division by 0.
 
 ## POW
 
 -   Syntax
 
     ```
-    Double pow(Double x, Double y)
-    Decimal pow(Decimal x, Decimal y)
+    DOUBLE POW(DOUBLE x, DOUBLE y)
+    DECIMAL POW(DECIMAL x, DECIMAL y)
     ```
 
 -   Description
 
-    Returns the yth power of x, that is, `x^y`.
+    This function calculates the yth power of x, namely, `x^y`.
 
 -   Parameters
     -   x: a value of the DOUBLE or DECIMAL type. If the input value is of the STRING or BIGINT type, it is implicitly converted to a value of the DOUBLE type before calculation. If the input value is of another data type, an error is returned.
@@ -400,16 +444,16 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Syntax
 
     ```
-    Double rand(Bigint seed)
+    DOUBLE RAND(BIGINT seed)
     ```
 
 -   Description
 
-    Returns a random number of the DOUBLE type with a random number specified by seed. The value ranges from 0 to 1.
+    This function returns a random number of the DOUBLE type. The value ranges from 0 to 1.
 
--   Parameter
+-   Parameters
 
-    seed: a random number of the BIGINT type. This parameter is optional and specifies the start number of a random number sequence.
+    seed: the random seed of the BIGINT type. This parameter specifies the starting point in generating random numbers. The parameter is optional.
 
 -   Return value
 
@@ -418,8 +462,8 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Examples
 
     ```
-    select rand() from dual;
-    select rand(1) from dual;
+    SELECT RAND() FROM;
+    SELECT RAND(1) FROM;
     ```
 
 
@@ -428,37 +472,37 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Syntax
 
     ```
-    Double round(Double number, [Bigint Decimal_places])
-    Decimal round(Decimal number, [Bigint Decimal_places])
+    DOUBLE ROUND(DOUBLE number, [BIGINT DECIMAL_places])
+    DECIMAL ROUND(DECIMAL number, [BIGINT DECIMAL_places])
     ```
 
 -   Description
 
-    Returns a number rounded to the specified decimal place.
+    This function returns a number rounded to the specified decimal place.
 
 -   Parameters
     -   number: a value of the DOUBLE or DECIMAL type. If the input value is of the STRING or BIGINT type, it is implicitly converted to a value of the DOUBLE type before calculation. If the input value is of another data type, an error is returned.
-    -   Decimal\_places: the decimal place, which is a constant of the BIGINT type. The value is rounded to the decimal point. If it is of another type, an error is returned. If this parameter is not specified, the number is rounded to the ones place. The default value is 0.
+    -   DECIMAL\_places: the decimal place, which is a constant of the BIGINT type. The value is rounded to the decimal point. If it is of another data type, an error is returned. If this parameter is not specified, the number is rounded to the ones place. The default value is 0.
 
-        **Note:** Decimal\_places can be a negative value. The negative value is counted from the decimal point to the left and the decimal part is excluded. If Decimal\_places exceeds the length of the integer part, 0 is returned.
+        **Note:** The value of DECIMAL\_places can be negative. A negative value is counted from the decimal point to the left and the decimal part is excluded. If DECIMAL\_places exceeds the length of the integer part, 0 is returned.
 
 -   Return value
 
-    A value of the DOUBLE or DECIMAL type is returned. If any input parameter is NULL, NULL is returned.
+    A value of the DOUBLE or DECIMAL type is returned. If any input value is NULL, NULL is returned.
 
 -   Examples
 
     ```
-    round(125.315)=125.0
-    round(125.315, 0)=125.0
-    round(125.315, 1)=125.3
-    round(125.315, 2)=125.32
-    round(125.315, 3)=125.315
-    round(-125.315, 2)=-125.32
-    round(123.345, -2)=100.0
-    round(null)=null
-    round(123.345, 4)=123.345
-    round(123.345, -4)=0.0
+    ROUND(125.315)=125.0
+    ROUND(125.315, 0)=125.0
+    ROUND(125.315, 1)=125.3
+    ROUND(125.315, 2)=125.32
+    ROUND(125.315, 3)=125.315
+    ROUND(-125.315, 2)=-125.32
+    ROUND(123.345, -2)=100.0
+    ROUND(null)=null
+    ROUND(123.345, 4)=123.345
+    ROUND(123.345, -4)=0.0
     ```
 
 
@@ -467,15 +511,15 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Syntax
 
     ```
-    Double sin(Double number)
-    Decimal sin(Decimal number)
+    DOUBLE SIN(DOUBLE number)
+    DECIMAL SIN(DECIMAL number)
     ```
 
 -   Description
 
-    Calculates the sine of number, which is a radian value.
+    This function calculates the sine of number, which is a radian value.
 
--   Parameter
+-   Parameters
 
     number: a value of the DOUBLE or DECIMAL type. If the input value is of the STRING or BIGINT type, it is implicitly converted to a value of the DOUBLE type before calculation. If the input value is of another data type, an error is returned.
 
@@ -489,15 +533,15 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Syntax
 
     ```
-    Double sinh(Double number)
-    Decimal sinh(Decimal number)
+    DOUBLE SINH(DOUBLE number)
+    DECIMAL SINH(DECIMAL number)
     ```
 
 -   Description
 
-    Calculates the hyperbolic sine of number.
+    This function calculates the hyperbolic sine of number.
 
--   Parameter
+-   Parameters
 
     number: a value of the DOUBLE or DECIMAL type. If the input value is of the STRING or BIGINT type, it is implicitly converted to a value of the DOUBLE type before calculation. If the input value is of another data type, an error is returned.
 
@@ -511,15 +555,15 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Syntax
 
     ```
-    Double sqrt(Double number)
-    Decimal sqrt(Decimal number)
+    DOUBLE SQRT(DOUBLE number)
+    DECIMAL SQRT(DECIMAL number)
     ```
 
 -   Description
 
-    Calculates the square root of number.
+    This function calculates the square root of number.
 
--   Parameter
+-   Parameters
 
     number: a value of the DOUBLE or DECIMAL type. It must be greater than 0. If it is less than 0, an error is returned. If the input value is of the STRING or BIGINT type, it is implicitly converted to a value of the DOUBLE type before calculation. If the input value is of another data type, an error is returned.
 
@@ -530,18 +574,18 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 
 ## TAN
 
--   Description
+-   Syntax
 
     ```
-    Double tan(Double number)
-    Decimal tan(Decimal number)
+    DOUBLE TAN(DOUBLE number)
+    DECIMAL TAN(DECIMAL number)
     ```
 
 -   Description
 
-    Calculates the tangent of number, which is a radian value.
+    This function calculates the tangent of number, which is a radian value.
 
--   Parameter
+-   Parameters
 
     number: a value of the DOUBLE or DECIMAL type. If the input value is of the STRING or BIGINT type, it is implicitly converted to a value of the DOUBLE type before calculation. If the input value is of another data type, an error is returned.
 
@@ -555,15 +599,15 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Syntax
 
     ```
-    Double tanh(Double number)
-    Decimal tanh(Decimal number)
+    DOUBLE TANH(DOUBLE number)
+    DECIMAL TANH(DECIMAL number)
     ```
 
 -   Description
 
-    Calculates the hyperbolic tangent of number.
+    This function calculates the hyperbolic tangent of number.
 
--   Parameter
+-   Parameters
 
     number: a value of the DOUBLE or DECIMAL type. If the input value is of the STRING or BIGINT type, it is implicitly converted to a value of the DOUBLE type before calculation. If the input value is of another data type, an error is returned.
 
@@ -577,19 +621,19 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 -   Syntax
 
     ```
-    Double trunc(Double number[, Bigint Decimal_places])
-    Decimal trunc(Decimal number[, Bigint Decimal_places])
+    DOUBLE TRUNC(DOUBLE number[, BIGINT DECIMAL_places])
+    DECIMAL TRUNC(DECIMAL number[, BIGINT DECIMAL_places])
     ```
 
 -   Description
 
-    Truncates the input value of number and right-fills it with zeros from the specified position.
+    This function truncates the input value of number to a specified number of decimal places.
 
 -   Parameters
     -   number: a value of the DOUBLE or DECIMAL type. If the input value is of the STRING or BIGINT type, it is implicitly converted to a value of the DOUBLE type before calculation. If the input value is of another data type, an error is returned.
-    -   Decimal\_places: the decimal place, which is a constant of the BIGINT type. This parameter indicates the position where the number is truncated. If it is of another data type, it is converted to the BIGINT type. If this parameter is not specified, the number is truncated to the ones place.
+    -   DECIMAL\_places: the decimal place, which is a constant of the BIGINT type. This parameter indicates the position where the number is truncated. If it is of another data type, it is converted to the BIGINT type. If this parameter is not specified, the number is truncated to the ones place.
 
-        **Note:** Decimal\_places can be a negative value, which indicates that the number is truncated from the decimal point to the left and the decimal part is left out. If Decimal\_places exceeds the length of the integer part, 0 is returned.
+        **Note:** DECIMAL\_places can be a negative value, which indicates that the number is truncated from the decimal point to the left and the decimal part is left out. If DECIMAL\_places exceeds the length of the integer part, 0 is returned.
 
 -   Return value
 
@@ -597,22 +641,22 @@ This topic describes the mathematical functions supported by MaxCompute SQL.
 
     **Note:**
 
-    -   If a value of the DOUBLE type is returned, the return value may not be displayed properly. This issue exists in all systems. For more information, see `trunc(125.815,1)` in this example.
+    -   If a value of the DOUBLE type is returned, the return value may not be properly displayed. This issue exists in all systems. For more information, see `TRUNC(125.815,1)` in this example.
     -   The number is filled with zeros from the specified position.
 -   Examples
 
     ```
-    trunc(125.815)=125.0
-    trunc(125.815,0)=125.0
-    trunc(125.815,1)=125.80000000000001
-    trunc(125.815,2)=125.81
-    trunc(125.815,3)=125.815
-    trunc(-125.815,2)=-125.81
-    trunc(125.815,-1)=120.0
-    trunc(125.815,-2)=100.0
-    trunc(125.815,-3)=0.0
-    trunc(123.345,4)=123.345
-    trunc(123.345,-4)=0.0
+    TRUNC(125.815)=125.0
+    TRUNC(125.815,0)=125.0
+    TRUNC(125.815,1)=125.80000000000001
+    TRUNC(125.815,2)=125.81
+    TRUNC(125.815,3)=125.815
+    TRUNC(-125.815,2)=-125.81
+    TRUNC(125.815,-1)=120.0
+    TRUNC(125.815,-2)=100.0
+    TRUNC(125.815,-3)=0.0
+    TRUNC(123.345,4)=123.345
+    TRUNC(123.345,-4)=0.0
     ```
 
 
@@ -635,15 +679,15 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Syntax
 
     ```
-    Double log2(Double number)
-    Double log2(Decimal number)
+    DOUBLE LOG2(DOUBLE number)
+    DOUBLE LOG2(DECIMAL number)
     ```
 
 -   Description
 
-    Calculates the logarithm of number with the base number of 2.
+    This function calculates the logarithm of number with the base number of 2.
 
--   Parameter
+-   Parameters
 
     number: a value of the DOUBLE or DECIMAL type.
 
@@ -654,9 +698,9 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Examples
 
     ```
-    log2(null)=null
-    log2(0)=null
-    log2(8)=3.0
+    LOG2(null)=null
+    LOG2(0)=null
+    LOG2(8)=3.0
     ```
 
 
@@ -665,15 +709,15 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Syntax
 
     ```
-    Double log10(Double number)
-    Double log10(Decimal number)
+    DOUBLE LOG10(DOUBLE number)
+    DOUBLE LOG10(DECIMAL number)
     ```
 
 -   Description
 
-    Calculates the logarithm of number with the base number of 10.
+    This function calculates the logarithm of number with the base number of 10.
 
--   Parameter
+-   Parameters
 
     number: a value of the DOUBLE or DECIMAL type.
 
@@ -684,9 +728,9 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Examples
 
     ```
-    log10(null)=null
-    log10(0)=null
-    log10(8)=0.9030899869919435
+    LOG10(null)=null
+    LOG10(0)=null
+    LOG10(8)=0.9030899869919435
     ```
 
 
@@ -695,14 +739,14 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Syntax
 
     ```
-    String bin(Bigint number)
+    STRING BIN(BIGINT number)
     ```
 
 -   Description
 
-    Calculates the binary code of number.
+    This function calculates the binary code of number.
 
--   Parameter
+-   Parameters
 
     number: a value of the BIGINT type.
 
@@ -713,9 +757,9 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Examples
 
     ```
-    bin(0)='0'
-    bin(null)='null'
-    bin(12)='1100'
+    BIN(0)='0'
+    BIN(null)='null'
+    BIN(12)='1100'
     ```
 
 
@@ -724,16 +768,16 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Syntax
 
     ```
-    String hex(Bigint number) 
-    String hex(String number)
-    String hex(BINARY number)
+    STRING HEX(BIGINT number) 
+    STRING HEX(STRING number)
+    STRING HEX(BINARY number)
     ```
 
 -   Description
 
-    Converts an integer or a string into a hexadecimal number.
+    This function converts an integer or a string into a hexadecimal number.
 
--   Parameter
+-   Parameters
 
     number: If number is of the BIGINT type, a hexadecimal number is returned. If number is of the STRING type, a string in hexadecimal format is returned.
 
@@ -744,11 +788,11 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Examples
 
     ```
-    hex(0)=0
-    hex('abc')='616263'
-    hex(17)='11'
-    hex('17')='3137'
-    hex(null): indicates that an exception occurs and the execution failed.
+    HEX(0)=0
+    HEX('abc')='616263'
+    HEX(17)='11'
+    HEX('17')='3137'
+    HEX(null): indicates that an exception occurs and the execution failed.
     ```
 
 
@@ -757,26 +801,26 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Syntax
 
     ```
-    BINARY unhex(String number)
+    BINARY UNHEX(STRING number)
     ```
 
 -   Description
 
-    Converts a hexadecimal string into a string.
+    This function converts a hexadecimal string into a string.
 
--   Parameter
+-   Parameters
 
     number: the hexadecimal string.
 
 -   Return value
 
-    A value of the BINARY type is returned. If the input is 0, an error is returned. If the input is NULL, NULL is returned.
+    A value of the BINARY type is returned. If the input value is 0, an error is returned. If the input value is NULL, NULL is returned.
 
 -   Examples
 
     ```
-    unhex('616263')='abc'
-    unhex(616263)='abc'
+    UNHEX('616263')='abc'
+    UNHEX(616263)='abc'
     ```
 
 
@@ -785,14 +829,14 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Syntax
 
     ```
-    Double radians(Double number)
+    DOUBLE RADIANS(DOUBLE number)
     ```
 
 -   Description
 
-    Converts an angle to a radian value.
+    This function converts a degree to a radian value.
 
--   Parameter
+-   Parameters
 
     number: a value of the DOUBLE type.
 
@@ -803,9 +847,9 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Examples
 
     ```
-    radians(90)=1.5707963267948966
-    radians(0)=0.0
-    radians(null)=null
+    RADIANS(90)=1.5707963267948966
+    RADIANS(0)=0.0
+    RADIANS(null)=null
     ```
 
 
@@ -814,15 +858,15 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Syntax
 
     ```
-    Double degrees(Double number) 
-    Double degrees(Decimal number)
+    DOUBLE DEGREES(DOUBLE number) 
+    DOUBLE DEGREES(DECIMAL number)
     ```
 
 -   Description
 
-    Converts a radian value to an angle.
+    This function converts a radian value to a degree.
 
--   Parameter
+-   Parameters
 
     number: a value of the DOUBLE or DECIMAL type.
 
@@ -833,9 +877,9 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Examples
 
     ```
-    degrees(1.5707963267948966)=90.0
-    degrees(0)=0.0
-    degrees(null)=null
+    DEGREES(1.5707963267948966)=90.0
+    DEGREES(0)=0.0
+    DEGREES(null)=null
     ```
 
 
@@ -844,15 +888,15 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Syntax
 
     ```
-    Double sign(Double number)
-    Double sign(Decimal number)
+    DOUBLE SIGN(DOUBLE number)
+    DOUBLE SIGN(DECIMAL number)
     ```
 
 -   Description
 
-    Obtains the sign of an input parameter.
+    This function returns the sign of an input parameter.
 
--   Parameter
+-   Parameters
 
     number: a value of the DOUBLE or DECIMAL type.
 
@@ -867,10 +911,10 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Examples
 
     ```
-    sign(-2.5)=-1.0
-    sign(2.5)=1.0
-    sign(0)=0.0
-    sign(null)=null
+    SIGN(-2.5)=-1.0
+    SIGN(2.5)=1.0
+    SIGN(0)=0.0
+    SIGN(null)=null
     ```
 
 
@@ -879,21 +923,21 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Syntax
 
     ```
-    Double e()
+    DOUBLE E()
     ```
 
 -   Description
 
-    Calculates the value of `e`.
+    This function calculates the value of `e`.
 
 -   Return value
 
     A value of the DOUBLE type is returned.
 
--   Example
+-   Examples
 
     ```
-    e()=2.718281828459045
+    E()=2.718281828459045
     ```
 
 
@@ -902,21 +946,21 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Syntax
 
     ```
-    Double pi()
+    DOUBLE PI()
     ```
 
 -   Description
 
-    Calculates the value of π.
+    This function calculates the value of π.
 
 -   Return value
 
     A value of the DOUBLE type is returned.
 
--   Example
+-   Examples
 
     ```
-    pi()=3.141592653589793
+    PI()=3.141592653589793
     ```
 
 
@@ -925,14 +969,14 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Syntax
 
     ```
-    Bigint factorial(Int number)
+    BIGINT FACTORIAL(Int number)
     ```
 
 -   Description
 
-    Calculates the factorial of number.
+    This function calculates the factorial of number.
 
--   Parameter
+-   Parameters
 
     number: a value of the INT type. The value ranges from 0 to 20.
 
@@ -940,10 +984,10 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 
     A value of the BIGINT type is returned. If the input value is 0, 1 is returned. If the input value is NULL or a value that does not fall into the range from 0 to 20, NULL is returned.
 
--   Example
+-   Examples
 
     ```
-    factorial(5)=120 --5! =5*4*3*2*1=120
+    FACTORIAL(5)=120 --5! =5*4*3*2*1=120
     ```
 
 
@@ -952,14 +996,14 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Syntax
 
     ```
-    Double cbrt(Double number)
+    DOUBLE CBRT(DOUBLE number)
     ```
 
 -   Description
 
-    Calculates the cube root of number.
+    This function calculates the cube root of number.
 
--   Parameter
+-   Parameters
 
     number: a value of the DOUBLE type.
 
@@ -970,8 +1014,8 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Examples
 
     ```
-    cbrt(8)=2
-    cbrt(null)=null
+    CBRT(8)=2
+    CBRT(null)=null
     ```
 
 
@@ -980,13 +1024,13 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Syntax
 
     ```
-    Int shiftleft(Tinyint|Smallint|Int number1, Int number2)
-    Bigint shiftleft(Bigint number1, Int number2)
+    INT SHIFTLEFT(TINYINT|SMALLINT|INT number1, INT number2)
+    BIGINT SHIFTLEFT(BIGINT number1, INT number2)
     ```
 
 -   Description
 
-    Shifts a value left by a specific number of places \(<<\).
+    This function shifts a value left by a specific number of places \(<<\).
 
 -   Parameters
     -   number1: an integer of the TINYINT, SMALLINT, INT, or BIGINT type.
@@ -998,8 +1042,8 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Examples
 
     ```
-    shiftleft(1,2)=4  //Shifts the binary value of 1 two places to the left (1<<2, 0001 shifted to be 0100).
-    shiftleft(4,3)=32  //Shifts the binary value of 4 three places to the left (4<<3, 0100 shifted to be 100000).
+    SHIFTLEFT(1,2)=4  // Shift the binary value of 1 two places to the left (1<<2,0001 shifted to be 0100).
+    SHIFTLEFT(4,3)=32  // Shift the binary value of 4 three places to the left (4<<3,0100 shifted to be 100000).
     ```
 
 
@@ -1008,13 +1052,13 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Syntax
 
     ```
-    Int shiftright(Tinyint|Smallint|Int number1, Int number2)
-    Bigint shiftright(Bigint number1, Int number2)
+    INT SHIFTRIGHT(TINYINT|SMALLINT|INT number1, INT number2)
+    BIGINT SHIFTRIGHT(BIGINT number1, INT number2)
     ```
 
 -   Description
 
-    Shifts a value right by a specific number of places \(\>\>\).
+    This function shifts a value right by a specific number of places \(\>\>\).
 
 -   Parameters
     -   number1: an integer of the TINYINT, SMALLINT, INT, or BIGINT type.
@@ -1026,8 +1070,8 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Examples
 
     ```
-    shiftright(4,2)=1 //Shifts the binary value of 4 two places to the right (4>>2, 0100 shifted to be 0001).
-    shiftright(32,3)=4 //Shifts the binary value of 32 three places to the right (32>>3, 100000 shifted to be 0100).
+    SHIFTRIGHT(4,2)=1 // Shift the binary value of 4 two places to the right (4>>2,0100 shifted to be 0001).
+    SHIFTRIGHT(32,3)=4 // Shift the binary value of 32 three places to the right (32>>3,100000 shifted to be 0100).
     ```
 
 
@@ -1036,13 +1080,13 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Syntax
 
     ```
-    Int shiftrightunsigned(Tinyint|Smallint|Int number1, Int number2)
-    Bigint shiftrightunsigned(Bigint number1, Int number2)
+    INT SHIFTRIGHTUNSIGNED(TINYINT|SMALLINT|INT number1, INT number2)
+    BIGINT SHIFTRIGHTUNSIGNED(BIGINT number1, INT number2)
     ```
 
 -   Description
 
-    Shifts an unsigned value right by a specific number of places \(\>\>\>\).
+    This function shifts an unsigned value right by a specific number of places \(\>\>\>\).
 
 -   Parameters
     -   number1: an integer of the TINYINT, SMALLINT, INT, or BIGINT type.
@@ -1054,8 +1098,8 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Examples
 
     ```
-    shiftrightunsigned(8,2)=2  //Shifts the binary unsigned value of 8 two places to the right (8>>>2, 1000 shifted to be 0010).
-    shiftrightunsigned(-14,2)=1073741820  //Shifts the binary value of -14 two places to the right (-14>>>2, 11111111 11111111 11111111 11110010 shifted to be 00111111 11111111 11111111 11111100).
+    SHIFTRIGHTUNSIGNED(8,2)=2  // Shift the binary unsigned value of 8 two places to the right (8>>>2,1000 shifted to be 0010).
+    SHIFTRIGHTUNSIGNED(-14,2)=1073741820  // Shift the binary value of -14 two places to the right (-14>>>2, 11111111 11111111 11111111 11110010 shifted to be 00111111 11111111 11111111 11111100).
     ```
 
 
@@ -1064,16 +1108,16 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Syntax
 
     ```
-    string format_number(float|double|decimal expr1, expr2)
+    STRING FORMAT_NUMBER(FLOAT|DOUBLE|DECIMAL expr1, expr2)
     ```
 
 -   Description
 
-    Converts a number to a string in a specified format.
+    This function converts a number to a string in the specified format.
 
 -   Parameters
-    -   expr1: a numeric expression to format.
-    -   expr2: the number of decimal places. It can be of the INT type. If can also be expressed in the format of `#,###,###. ##`.
+    -   expr1: a numeric expression that you want to format.
+    -   expr2: the number of decimal places. It can be of the INT type. It can also be expressed in the format of `#,###,###. ##`.
         -   If expr2 is greater than 0, the value is rounded to the specified place after the decimal point.
         -   If expr2 is equal to 0, the value has no decimal point or fractional part.
         -   If expr2 is less than 0 or greater than 340, an error is returned.
@@ -1084,8 +1128,59 @@ If a new data type, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, o
 -   Examples
 
     ```
-    select format_number(5.230134523424545456,3);-- The return value is 5.230.
-    select format_number(12332.123456, '#,###,###,###. ###');//The return value is 12,332.123.
+    SELECT FORMAT_NUMBER(5.230134523424545456,3);// The return value is 5.230.
+    SELECT FORMAT_NUMBER(12332.123456, '#,###,###,###. ###');// The return value is 12,332.123.
+    ```
+
+
+## WIDTH\_BUCKET
+
+-   Syntax
+
+    ```
+    WIDTH_BUCKET(NUMERIC expr, NUMERIC min_value, NUMERIC max_value, INT num_buckets)
+    ```
+
+-   Description
+
+    This function specifies the number of buckets and the minimum and maximum values of the acceptable range for a bucket. It allows you to construct equi-width buckets, in which the bucket range is divided into intervals that have an identical size. It returns the ID of the bucket into which the value of a specific expression falls. This function supports the following data types: DECIMAL\(precision,scale\) in the MaxCompute V2.0 data type edition, BIGINT, INT, FLOAT, DOUBLE, and DECIMAL. For more information, see [MaxCompute V2.0 data type edition](/intl.en-US/Development/Data types/MaxCompute V2.0 data type edition.md).
+
+-   Parameters
+    -   expr: the expression whose matching bucket ID you want to identify.
+    -   min\_value: the minimum value of the acceptable range for the bucket.
+    -   max\_value: the maximum value of the acceptable range for the bucket. The value must be greater than min\_value.
+    -   num\_buckets: the number of buckets. The value must be greater than 0.
+-   Return value
+
+    A value of the BIGINT type is returned. The value ranges from 0 to num\_buckets plus 1. If the value of expr is less than min\_value, 0 is returned. If the value of expr is greater than max\_value, the value of num\_buckets plus 1 is returned. If the value of expr is NULL, NULL is returned. In other cases, the ID of the bucket into which the value falls is returned. The bucket ID is named based on the following formula: `Bucket ID = FLOOR[num_buckets × (expr - min_value)/(max_value - min_value) + 1]`.
+
+-   Examples
+
+    ```
+    SELECT key,value,WIDTH_BUCKET(value,100,500,5) as value_group
+    FROM VALUES
+        (1,99),
+        (2,100),
+        (3,199),
+        (4,200),
+        (5,499),
+        (6,500),
+        (7,501),
+        (8,NULL)
+    AS t(key,value);
+    -- The following result is returned:
+    +-------+--------+-------------+
+    | key   | value  | value_group |
+    +-------+--------+-------------+
+    | 1     | 99     | 0           |
+    | 2     | 100    | 1           |
+    | 3     | 199    | 2           |
+    | 4     | 200    | 2           |
+    | 5     | 499    | 5           |
+    | 6     | 500    | 6           |
+    | 7     | 501    | 6           |
+    | 8     | \N     | \N          |
+    +-------+--------+-------------+
     ```
 
 
