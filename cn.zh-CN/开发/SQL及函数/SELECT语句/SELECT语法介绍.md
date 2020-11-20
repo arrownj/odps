@@ -211,7 +211,7 @@ SELECT region, total_price FROM sale_detail GROUP BY region, total_price;
     ```
     --查询表sale_detail的信息，并按照region升序排列前100条。
     SELECT * FROM sale_detail ORDER BY region LIMIT 100;
-    --ORDER BY没有与LIMIT共同使用时，返回报错。
+    --ORDER BY默认要求带LIMIT数据行数限制，没有LIMIT会返回报错。如您需要解除ORDER BY必须带LIMIT的限制，请参见[LIMIT NUMBER限制输出行数\>解除ORDER BY必须带LIMIT的限制](#section_low_fwz_gvu)。
     SELECT * FROM sale_detail ORDER BY region;
     --ORDER BY加列的别名。
     SELECT region AS r FROM sale_detail ORDER BY region LIMIT 100;
@@ -261,6 +261,16 @@ SELECT region, total_price FROM sale_detail GROUP BY region, total_price;
 ## LIMIT NUMBER限制输出行数
 
 `LIMIT number`中的`number`是常数，限制输出行数。
+
+**解除`ORDER BY`必须带`LIMIT`的限制**
+
+因为`ORDER BY`需要对单个执行节点做全局排序，所以默认带`LIMIT`限制，避免误用导致单点处理大量数据。如果您的使用场景确实需要`ORDER BY`放开`LIMIT`限制，可以通过如下两种方式实现：
+
+-   Project级别：设置`setproject odps.sql.validate.orderby.limit=false;`关闭`ORDER BY`必须带`LIMIT`的限制。
+-   Session级别：设置`setproject odps.sql.validate.orderby.limit=false;`关闭`ORDER BY`必须带`LIMIT`的限制，需要与SQL语句一起提交。
+
+    **说明：** 如果关闭`ORDER BY`必须带`LIMIT`的限制，在单个执行节点有大量数据排序的情况下，资源消耗或处理时长等性能表现会受到影响。
+
 
 **屏显限制说明**
 
