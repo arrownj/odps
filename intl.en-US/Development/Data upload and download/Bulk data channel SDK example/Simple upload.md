@@ -4,7 +4,7 @@ keyword: [Tunnel SDK, upload data]
 
 # Simple upload
 
-Tunnel SDK is a tunnel service provided by MaxCompute to upload and download large amounts of offline data. Tunnel SDK applies only to scenarios where you upload or download 64 MB or more data each time. If you upload or download less than 64 MB streaming data each time, we recommend that you use DataHub for better performance and user experience.
+Tunnel SDK is a tunnel service provided by MaxCompute to upload and download large amounts of offline data.
 
 ## Procedure
 
