@@ -192,7 +192,7 @@ SELECT region, total_price FROM sale_detail GROUP BY region, total_price;
         --设置Flag。
         set hive.orderby.position.alias=true;
         --创建表src。
-        CREAT table src(key BIGINT，value BIGINT);
+        CREATE table src(key BIGINT，value BIGINT);
         --以value值分组，返回表src的所有信息。
         SELECT * FROM src ORDER BY 2 LIMIT 100;
         等同于
