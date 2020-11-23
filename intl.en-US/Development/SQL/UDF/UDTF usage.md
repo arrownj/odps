@@ -8,7 +8,7 @@ This topic describes the usage and limits of Java user-defined table functions \
 
 ## Usage
 
-The following statements provide examples to show typical use cases of UDTFs in SQL:
+The following statements provide examples to show typical use cases of UDTFs in MaxCompute SQL:
 
 ```
 select user_udtf(col0, col1, col2) as (c0, c1) from my_table; 
@@ -16,9 +16,11 @@ select user_udtf(col0, col1, col2) as (c0, c1) from (select * from my_table dist
 select reduce_udtf(col0, col1, col2) as (c0, c1) from (select col0, col1, col2 from (select map_udtf(a0, a1, a2, a3) as (col0, col1, col2) from my_table) t1 distribute by col0 sort by col0, col1) t2;
 ```
 
+For more information about UDTFs, see [Java UDF](/intl.en-US/Development/SQL/UDF/Java UDF.md) and [Python 2 UDFs](/intl.en-US/Development/SQL/UDF/Python 2 UDFs.md).
+
 ## Limits
 
-When you use UDTFs, note the following limits:
+When you use UDTFs, take note of the following limits:
 
 -   A `SELECT` clause cannot contain other expressions.
 
