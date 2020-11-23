@@ -16,6 +16,8 @@ select user_udtf(col0, col1, col2) as (c0, c1) from (select * from my_table dist
 select reduce_udtf(col0, col1, col2) as (c0, c1) from (select col0, col1, col2 from (select map_udtf(a0, a1, a2, a3) as (col0, col1, col2) from my_table) t1 distribute by col0 sort by col0, col1) t2;
 ```
 
+UDTF的详细使用说明请参见[Java UDTF](/intl.zh-CN/开发/SQL及函数/UDF/Java UDF.md)和[Python UDTF](/intl.zh-CN/开发/SQL及函数/UDF/Python 2 UDF.md)。
+
 ## 使用限制
 
 UDTF的使用限制如下：
