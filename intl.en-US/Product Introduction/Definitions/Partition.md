@@ -14,7 +14,7 @@ In MaxCompute, each value in a partition key column is specified as a partition.
 
 Partitioned tables improve query efficiency. You can specify the name of the partition that you want to query by using the WHERE clause. This way, MaxCompute scans only the specified partition, which improves processing efficiency and reduces cost. If you specify the name of the partition that you want to access when you query the table, only the specified partition is read.
 
-![Partitioned table](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/3549559951/p1036.png)
+![Partitioned table](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/en-US/3549559951/p1036.png)
 
 The execution of some SQL jobs for operations on partitions is less efficient and may incur higher costs. For more information, see [Insert data in dynamic partition mode \(DYNAMIC PARTITION\)](/intl.en-US/Development/SQL/Insert Operation/Insert data in dynamic partition mode (DYNAMIC PARTITION).md).
 
@@ -37,8 +37,8 @@ MaxCompute V1.0 supports only partition key columns of the STRING type. You can 
 --- Create a table named parttest.
 CREATE TABLE parttest (a bigint) PARTITIONED BY (pt bigint);
 --- Insert data into the parttest table.
-INSERT INTO parttest partition(pt) SELECT 1, 2 from dual;
-INSERT INTO parttest partition(pt) SELECT 1, 10 from dual;
+INSERT INTO parttest partition(pt) SELECT 1, 2;
+INSERT INTO parttest partition(pt) SELECT 1, 10;
 --- Query the rows where the value of pt is greater than or equal to 2.
 SELECT * FROM parttest WHERE pt >= '2';
 ```
@@ -49,7 +49,7 @@ SELECT * FROM parttest WHERE pt >= '2';
 
     ```
     -- Create a partitioned table that contains two levels of partitions. In the partitioned table, pt is used as a level-1 partition key column and region is used as a level-2 partition key column.
-    CREATE TABLE src (key string, value bigint) PARTITIONED BY (pt string,region string);
+    CREATE TABLE src (shop_name string, customer_id bigint) PARTITIONED BY (pt string,region string);
     ```
 
 -   Use the values in partition key columns as filter conditions to query a table.
