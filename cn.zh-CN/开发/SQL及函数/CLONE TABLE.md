@@ -9,11 +9,12 @@ CLONE TABLE可以复制表数据到另一个表中，极大的提高了数据迁
 ## 使用限制
 
 -   目标表与源表的Schema需要兼容。
--   支持分区表和非分区表，暂不支持对Hash Clutered Table使用CLONE TABLE命令进行复制。
+-   支持分区表和非分区表，暂不支持对聚簇表使用CLONE TABLE命令进行复制。
 -   目标表已存在时，一次性复制分区的数量上限为10000个。
 -   目标表不存在时，无分区数量限制，满足原子性。
 -   对同一个非分区表或者分区表的同一个分区，执行CLONE TABLE命令的次数不能超过7次。
 -   不支持在跨区域的项目之间使用CLONE TABLE命令进行复制。
+-   不支持对外部表使用CLONE TABLE命令进行复制。
 
 ## 命令格式
 
@@ -64,7 +65,7 @@ odps@ multi>READ src_copy;
     odps@ multi>CLONE TABLE src_copy TO src_clone;
     ID = 2019102303024544g2540cdv2
     OK
-    //查看复制后目标表src_clone信息，验证数据准确性。
+    --查看复制后目标表src_clone信息，验证数据准确性。
     odps@ multi>SELECT * FROM src_clone;
     ```
 
@@ -74,7 +75,7 @@ odps@ multi>READ src_copy;
     odps@ multi>CLONE TABLE srcpart_copy PARTITION(ds="2008-04-09", hr='11') TO srcpart_clone IF EXISTS OVERWRITE;
     ID = 20191023030534986g4540cdv2
     OK
-    //查看复制后目标表srcpart_clone信息，验证数据准确性。
+    --查看复制后目标表srcpart_clone信息，验证数据准确性。
     odps@ multi>SELECT * FROM srcpart_clone;
     ```
 
@@ -84,7 +85,7 @@ odps@ multi>READ src_copy;
     odps@ multi>CLONE TABLE srcpart_copy TO srcpart_clone IF EXISTS IGNORE;
     ID = 20191023030619196g5540cdv2
     OK
-    //查看复制后目标表srcpart_clone信息，验证数据准确性。
+    --查看复制后目标表srcpart_clone信息，验证数据准确性。
     odps@ multi>SELECT * FROM srcpart_clone;
     ```
 
@@ -94,7 +95,7 @@ odps@ multi>READ src_copy;
     odps@ multi>CLONE TABLE srcpart_copy TO srcpart_clone2;
     ID = 20191023030825186g6540cdv2
     OK
-    //查看复制后目标表srcpart_clone2信息，验证数据准确性。
+    --查看复制后目标表srcpart_clone2信息，验证数据准确性。
     odps@ multi>CLONE TABLE srcpart_clone2;
     ```
 
