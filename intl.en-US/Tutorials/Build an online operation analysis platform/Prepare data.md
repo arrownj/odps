@@ -17,13 +17,13 @@ This topic describes how to use the data demo to generate data that simulates da
     You can download one of the following data demo packages based on your operating system. In this topic, the Windows 7 64-bit operating system is used.
 
     -   [Data demo package for macOS](http://yunxi-demo.oss-cn-hangzhou.aliyuncs.com/workshop_demo_mac.zip)
-    -   [Data demo package for Linux](https://yq.aliyun.com/go/articleRenderRedirect?spm=a2c4e.11153940.0.0.799ff2a3V4kJVT&url=http://yunxi-demo.oss-cn-hangzhou.aliyuncs.com/workshop_demo_linux.zip)
-    -   [Data demo package for Windows 7 64-bit](https://yq.aliyun.com/go/articleRenderRedirect?spm=a2c4e.11153940.0.0.799ff2a3V4kJVT&url=http://yunxi-demo.oss-cn-hangzhou.aliyuncs.com/workshop_demo.zip)
+    -   [Data demo package for Linux](http://yunxi-demo.oss-cn-hangzhou.aliyuncs.com/workshop_demo_linux.zip)
+    -   [Data demo package for Windows 7 64-bit](http://yunxi-demo.oss-cn-hangzhou.aliyuncs.com/workshop_demo.zip)
 2.  Configure the data demo.
 
     Decompress the data demo package and edit the app.conf file in the conf directory.
 
-    ![Configure the environment](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/2632711061/p49640.png)
+    ![Configure the environment](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/en-US/2632711061/p49640.png)
 
     The following content is in the app.conf file:
 
@@ -66,7 +66,7 @@ This topic describes how to use the data demo to generate data that simulates da
 
         The following figure shows the command output.
 
-        ![Prepare test data](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/2632711061/p49641.png)
+        ![Prepare test data](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/en-US/2632711061/p49641.png)
 
     In this process, the data demo automatically creates two tables in Tablestore. The following tables describe the columns in the created tables.
 
@@ -106,7 +106,7 @@ This topic describes how to use the data demo to generate data that simulates da
 
         In the preceding command, $\{userid\} indicates the user ID, $\{date\} indicates the date when the logs were generated, and $\{Top log count\} indicates the number of logs to query. For example, if a table was created on June 15, 2019, you can run the `workshop_demo.exe raw 00010 "2019-06-15" 20` command to query 20 logs for the user whose ID is 00010.
 
-        ![Detailed logs](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/2632711061/p49643.png)
+        ![Detailed logs](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/en-US/2632711061/p49643.png)
 
         **Note:** Tablestore is schema-free. Therefore, you do not need to pre-define attribute columns. Different events in the customize\_event column have different event content. Therefore, the data demo generates both a custom event and its content in a data record.
 
@@ -114,6 +114,6 @@ This topic describes how to use the data demo to generate data that simulates da
 
         You can run the `workshop_demo.exe day_active` command to query the number of daily active users.
 
-        ![Daily active users](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/2632711061/p49644.png)
+        ![Daily active users](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/en-US/2632711061/p49644.png)
 
 
