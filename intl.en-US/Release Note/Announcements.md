@@ -2,16 +2,7 @@
 
 This topic describes the updates to MaxCompute in reverse chronological order.
 
-## October 13, 2020 \(UTC+08:00\): The SQL engine is updated for better compatibility
-
-The following table describes the schedule for updating the SQL engine. If a change occurs, the new schedule prevails.
-
-|Sequence|Region|Date|
-|--------|------|----|
-|1|India \(Mumbai\), Indonesia \(Jakarta\), and UK \(London\)|October 13, 2020|
-|2|US \(Virginia\), UAE \(Dubai\), China \(beijing\), and China \(Shanghai\)|October 15, 2020|
-|3|Japan \(Tokyo\), Australia \(Sydney\), US \(Silicon Valley\), and Malaysia \(Kuala Lumpur\)|October 20, 2020|
-|4|Singapore \(Singapore\), China \(Hong Kong\) and Germany \(Frankfurt\)|October 22, 2020|
+## July 30, 2020 \(UTC+08:00\): The SQL engine is updated for better compatibility
 
 The `URL_DECODE` and `CONV` functions in MaxCompute SQL are updated. This section describes the update details.
 
@@ -32,7 +23,7 @@ The `URL_DECODE` and `CONV` functions in MaxCompute SQL are updated. This sectio
         -- The function returns the Chinese character both before and after the update. %E7%8E%8B is the UTF-8-encoded string of the Chinese character. In this example, no decoding format is specified for the function, and the function decodes %E7%8E%8B in UTF-8 by default.
         ```
 
-        **Note:** The command-line interface \(CLI\) of Windows has the following issue: If you use the odpscmd client of MaxCompute to run commands in Windows, the GBK decoding result of the URL\_DECODE function may be decoded in another format.
+        **Note:** The command-line interface \(CLI\) of Windows has the following issue: If you use the odpscmd client of MaxCompute to run commands in Windows, the GBK decoding result of the URL\_DECODE function may be decoded in another format.``
 
 -   `CONV` function
     -   In a project that uses the Hive-compatible data type edition, the CONV function returns 0 both before and after the update if the input parameters are invalid.
@@ -61,10 +52,10 @@ MaxCompute provides the following three data type editions: MaxCompute V1.0 data
 
 ## March 15, 2020 \(UTC+08:00\): The storage price of MaxCompute is reduced
 
-From March 15, 2020, the storage price of MaxCompute is reduced. For more information, see [Storage pricing \(pay-as-you-go\)](/intl.en-US/Pricing/Storage pricing (pay-as-you-go).md). The price is reduced based on the following rules:
+As of March 15, 2020, the storage price of MaxCompute is reduced. For more information, see [Storage pricing \(pay-as-you-go\)](/intl.en-US/Pricing/Storage pricing (pay-as-you-go).md). The price is reduced based on the following rules:
 
 -   The number of pricing tiers is reduced from five to three to simplify storage billing.
--   The unit price in each tier is reduced to lower the storage price.
+-   The unit price in each new tier is reduced to lower the storage price.
 
 The following table lists the tiered pricing method that was used before March 15, 2020.
 
@@ -120,7 +111,7 @@ The following table describes the schedule for updating the SQL engine. If a cha
 |1|Indonesia \(Jakarta\), UK \(London\), and India \(Mumbai\)|February 24, 2020|
 |2|UAE \(Dubai\), US \(Virginia\), China North 2 Ali Gov, and China \(Hong Kong\)|February 26, 2020|
 |3|Malaysia \(Kuala Lumpur\), Japan \(Tokyo\), and Germany \(Frankfurt\)|March 2, 2020|
-|4|US \(Silicon Valley\), Singapore \(Singapore\), and Australia \(Sydney\)|March 4, 2020|
+|4|US \(Silicon Valley\), Singapore, and Australia \(Sydney\)|March 4, 2020|
 
 -   The execution rule of the [GET\_IDCARD\_AGE](/intl.en-US/Development/SQL/Builtin functions/Other functions.md) function has changed.
     -   Based on the original execution rule of the GET\_IDCARD\_AGE function, if the difference between the current year and the year of birth is greater than 100, NULL is returned. After the new rule is applied, the difference between the current year and the year of birth is returned even if the difference exceeds 100. For example, the execution result of `get_idcard_age('110101190001011009')` is NULL before the change and 120 after the change.
@@ -139,7 +130,7 @@ The following table describes the schedule for updating the SQL engine. If a cha
     Before the change, if the input value for the character matching function [LIKE](/intl.en-US/Development/SQL/Appendix/LIKE usage.md) is an empty string and its pattern is `%%`, the return value is False. After the change, the return value is True.
 
     ```
-    -- Create a table and insert an empty string into the table.
+    -- Create a table and insert an empty string to the table.
     create table if not exists table_test (a string) lifecycle 3;
     insert into table table_test values ('');
     
@@ -161,13 +152,13 @@ The following table describes the schedule for updating the SQL engine. If a cha
     ```
 
 
-## December 25, 2019 \(UTC+08:00\): MaxCompute is compatible with open-source geospatial UDFs.
+## December 25, 2019 \(UTC+08:00\): MaxCompute is compatible with open source geospatial UDFs
 
-MaxCompute is compatible with open-source geospatial UDFs, which are implemented by ESRI for Apache Hive. You can register open-source geospatial UDFs with MaxCompute so that the functions can be called like open-source Hive UDFs. For more information, see [Open source geospatial UDFs](/intl.en-US/Development/SQL/UDF/Open source geospatial UDFs.md).
+MaxCompute is compatible with open source geospatial UDFs, which are implemented by ESRI for Apache Hive. You can register open source geospatial UDFs with MaxCompute so that the functions can be called like open source Hive UDFs. For more information, see [Open source geospatial UDFs](/intl.en-US/Development/SQL/UDF/Open source geospatial UDFs.md).
 
 ## October 11, 2019 \(UTC+08:00\): New features of MaxCompute SQL are introduced
 
--   You can force the JOIN operations or set operators including UNION, INTERSECT, and EXCEPT, inside parentheses \(\) to run first.
+-   You can force the JOIN operations or set operations, including UNION, INTERSECT, and EXCEPT, inside parentheses \(\) to run first.
 
     ```
     SELECT * FROM src JOIN (src2 JOIN src3 on xxx) ON yyy; 
@@ -208,9 +199,9 @@ MaxCompute is compatible with open-source geospatial UDFs, which are implemented
     A NATURAL JOIN operation is a process where two tables are joined on the basis of their common columns. Common columns are columns that have the same name in both tables. MaxCompute supports `OUTER NATURAL JOIN`. You can use the `USING` clause so that the JOIN operation returns common columns only once. The following code provides an example:
 
     ```
-    -- To join the src table that contains the key1, key2, a1, and a2 columns and the src2 table that contains the key1, key2, b1, and b2 columns, you can execute the following statement:
+    -- To join the src table that contains the key1, key2, a1, and a2 columns and the src2 table that contains the key1, key2, b1, and b2 columns, you can run the following statement:
     SELECT * FROM src NATURAL JOIN src2;
-    -- Both the src and src2 tables contain the key1 and key2 columns. In this case, the preceding statement is equivalent to the following statement:
+    -- Both the src and src2 tables contain the key1 and key2 fields. In this case, the preceding statement is equivalent to the following statement:
     SELECT src.key1 as key1, src.key2 as key2, src.a1, src.a2, src2.b1, src2.b2 FROM src INNER JOIN src2 ON src.key1 = src2.key1 AND src.key2 = src2.key2;
     ```
 
@@ -234,7 +225,7 @@ MaxCompute is compatible with open-source geospatial UDFs, which are implemented
 
 -   MaxCompute supports partition merging.
 
-    In MaxCompute, a maximum of 60,000 partitions can be created in a table. If excessive partitions exist, you can archive data in the data warehouse and merge partitions to reduce the number of partitions. When you trigger partition merging, MaxCompute merges multiple partitions in the same table into one partition, migrates their data to the merged partition, and then drops the previous partitions. The following code shows the syntax for merging partitions. For more information, see [Partition and column operations](/intl.en-US/Development/SQL/DDL SQL/Partition and column operations.md).
+    In MaxCompute, a maximum of 60,000 partitions can be created in a table. If excessive partitions exist, you can archive data in the data warehouse and merge partitions to reduce the number of partitions. When you trigger partition merging, MaxCompute merges multiple partitions in the same table to one partition, migrates their data to the merged partition, and then drops the previous partitions. The following code shows the syntax for merging partitions. For more information, see [Partition and column operations](/intl.en-US/Development/SQL/DDL SQL/Partition and column operations.md).
 
     ```
     ALTER TABLE <tableName> MERGE [IF EXISTS] PARTITION(<predicate>) [, PARTITION(<predicate2>) ...] OVERWRITE PARTITION(<fullPartitionSpec>) ;
@@ -257,7 +248,7 @@ On August 29, 2019, MaxCompute is upgraded. The upgrade may fail if you use a cu
 
 Upgrade time: 14:00 to 23:00 on August 29, 2019 \(UTC+08:00\)
 
-Regions: US \(Silicon Valley\) and Singapore \(Singapore\)
+Regions: US \(Silicon Valley\) and Singapore
 
 ## August 21, 2019 \(UTC+08:00\): A custom storage handler for a foreign table is used to update the Outputer interface in some regions
 
@@ -275,16 +266,16 @@ If you have questions, submit a ticket.
 
 ## July 24, 2019 \(UTC+08:00\): Spark on MaxCompute is supported
 
-Regions: China \(Hangzhou\), China \(Beijing\), China \(Shenzhen\), US \(Silicon Valley\), China \(Hong Kong\), Germany \(Frankfurt\), Singapore \(Singapore\), and India \(Mumbai\)
+Regions: China \(Hangzhou\), China \(Beijing\), China \(Shenzhen\), US \(Silicon Valley\), China \(Hong Kong\), Germany \(Frankfurt\), Singapore, and India \(Mumbai\)
 
 ## March 26, 2019 \(UTC+08:00\): MaxCompute SQL is updated
 
--   The GROUPING SETS clause as well as the CUBE and ROLLUP subclauses can be used to aggregate and analyze data of multiple dimensions. For more information, see [GROUPING SETS](/intl.en-US/Development/SQL/Select Operation/Grouping Sets.md).
+-   The GROUPING SETS clause as well as the CUBE and ROLLUP subclauses can be used to aggregate and analyze data of multiple dimensions. For more information, see [GROUPING SETS](/intl.en-US/Development/SQL/Select Operation/GROUPING SETS.md).
 -   The INTERSECT, MINUS, and EXCEPT clauses are supported. For more information, see [UNION, INTERSECT, and EXCEPT](/intl.en-US/Development/SQL/Select Operation/UNION, INTERSECT, and EXCEPT.md).
 -   When MaxCompute reads files in the ORC or Parquet format in OSS by using foreign tables, it prunes the columns in the files to reduce I/O, save resources, and lower overall computing costs.
 -   Systems that run in the Java UDX framework are enhanced to support writable parameters. For more information, see [Java UDF](/intl.en-US/Development/SQL/UDF/Java UDF.md).
 
-Optimized SQL performance
+**Optimized SQL performance**
 
 -   DynamicDAG: a required mechanism for dynamic optimization. DynamicDAG delays optimization of resource allocation or algorithm selection and triggers it at runtime to improve optimizations and reduce the possibility of generating low-performance execution plans.
 -   ShuffleRemove optimization: optimization for shuffles. MaxCompute supports ShuffleRemove for right tables that have duplicate keys during the execution of the INNER JOIN clause.
@@ -299,7 +290,7 @@ Billing standard for SQL computing that involves foreign tables:
 Fee of an SQL job that involves foreign tables = Input data volume × Unit price for SQL computing that involves foreign tables
 ```
 
-The unit price for SQL computing that involves foreign tables is USD 0.0044 per GB. All fees are charged the next day, and you will receive a bill in your account. For more information, see [Billing](/intl.en-US/Pricing/Billing method.md). If you have questions, submit a ticket.
+The unit price for SQL computing that involves foreign tables is USD 0.0044 per GB. All fees are charged the next day, and you will receive a bill in your account. For more information, see [Billing](/intl.en-US/Pricing/Billing.md). If you have questions, submit a ticket.
 
 ## 16:00 to 20:00 on January 15, 2019 \(UTC+08:00\): The underlying structure of MaxCompute in the China \(Hong Kong\) region is optimized
 
@@ -335,7 +326,7 @@ Limits and usage notes:
 -   If the local time zone is not UTC+8 when you upgrade MaxCompute, we recommend that you also upgrade SDK for Java and the related client. This ensures that the SQL-based computing result and data that is transferred by using Tunnel commands after January 1, 1900 are accurate and consistent. For DATETIME data that was generated earlier than January 1, 1900, the SQL-based computing result and data that is transferred by using Tunnel commands might differ up to 343 seconds. For DATETIME data that was generated earlier than January 1, 1928 and was uploaded before SDK for Java and the related client are upgraded, the time in the new version is 352 seconds earlier.
 -   If you do not upgrade SDK for Java or the related client to versions with the `-oversea` suffix, the SQL-based computing result may differ from data that is transferred by using Tunnel commands. For data that was generated earlier than January 1, 1900, the time difference is 9 seconds. For data that was generated within the period from January 1, 1900 to January 1, 1928, the time difference is 352 seconds.
 
-    **Note:** Modifying the time zone configuration in SDK for Java or on the related client does not affect the time zone configuration in DataWorks. Therefore, the time zones are different. You must evaluate how this may affect scheduled jobs in DataWorks. The time zone of a DataWorks server in the Japan \(Tokyo\) region is GMT+9, and that in the Singapore \(Singapore\) region is GMT+8.
+    **Note:** Modifying the time zone configuration in SDK for Java or on the related client does not affect the time zone configuration in DataWorks. Therefore, the time zones are different. You must evaluate how this may affect scheduled jobs in DataWorks. The time zone of a DataWorks server in the Japan \(Tokyo\) region is GMT+9, and that in the Singapore region is GMT+8.
 
 -   If you are using a third-party client that is connected to MaxCompute by using JDBC, you must configure the time zone on the client to ensure that the time of the client and that of the server are consistent.
 -   MapReduce supports time zone configuration.
