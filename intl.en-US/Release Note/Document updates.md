@@ -17,7 +17,7 @@ This topic describes the latest updates to MaxCompute V2.0 documentation. These 
 |2020-10-30|GBK encoding supported for OSS external tables in the CSV or TSV format|Updated description|The `odps.text.option.encoding` property supports GBK encoding.|[Access OSS data by using the built-in extractor](/intl.en-US/Development/External table/Access OSS data by using the built-in extractor.md)|
 |2020-10-30|DATETIME data type supported by time functions YEAR, QUARTER, MONTH, DAY, HOUR, MINUTE, and SECOND|Updated description|The time functions YEAR, QUARTER, MONTH, DAY, HOUR, MINUTE, and SECOND support the DATETIME data type.|[Date functions](/intl.en-US/Development/SQL/Builtin functions/Date functions.md)|
 |2020-10-30|WIDTH\_BUCKET function|New feature|The WIDTH\_BUCKET function is added. This function returns the ID of the bucket into which the value of a specific field falls.|[Mathematical functions](/intl.en-US/Development/SQL/Builtin functions/Mathematical functions.md)|
-|2020-10-12|Commercial use of MCQA|Updated description|The MaxCompute Query Acceleration \(MCQA\) feature is available for commercial use and charged.|[MCQA overview]()|
+|2020-10-12|Commercial use of MCQA|Updated description|The MaxCompute Query Acceleration \(MCQA\) feature is available for commercial use and charged.|[MCQA overview](/intl.en-US/Development/MaxCompute Query Acceleration/Overview.md)|
 |2020-10-10|Modification of the clustering property of tables|New description|The description of how to modify the clustering property of tables is added.|[Table operations](/intl.en-US/Development/SQL/DDL SQL/Table operations.md)|
 
 ## Updates in September 2020
