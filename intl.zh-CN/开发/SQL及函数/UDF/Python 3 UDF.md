@@ -22,7 +22,7 @@ set odps.sql.python.version=cp37;
 
 MaxCompute Python UDF支持第三方库，Python 2运行环境中安装了第三方库Numpy，作为标准库的补充。
 
-MaxCompute内置的Python 3运行环境中未安装第三方库Numpy。如果您需要使用Numpy的UDF，请手动上传Numpy的WHEEL包。从PyPI或镜像下载Numpy包时，包的文件名为numpy-<版本号\>-cp37-cp37m-manylinux1\_x86\_64.whl。上传包的操作请参见[资源操作](/intl.zh-CN/开发/常用命令/资源操作.md)或[PyODPS使用第三方包]()。
+MaxCompute内置的Python 3运行环境中未安装第三方库Numpy。如果您需要使用Numpy的UDF，请手动上传Numpy的WHEEL包。从PyPI或镜像下载Numpy包时，包的文件名为numpy-<版本号\>-cp37-cp37m-manylinux1\_x86\_64.whl。上传包的操作请参见[资源操作](/intl.zh-CN/开发/常用命令/资源操作.md)或[Python UDF使用第三方包](/intl.zh-CN/开发/SQL及函数/UDF/Python UDF使用第三方包.md)。
 
 ## Python 2 UDF迁移
 
@@ -173,12 +173,10 @@ class Explode(BaseUDTF):
 
 Python UDF可以通过`odps.distcache`模块引用资源文件，支持引用文件资源和表资源。
 
--   `odps.distcache.get_cache_file(resource_name)`：返回指定名字的资源内容。
+-   `odps.distcache.get_cache_file(resource_name, mode)`：以指定打开模式返回指定资源的内容。
 
-    -   `resource_name`为STRING类型，对应当前项目空间中已存在的资源名。如果资源名非法或者没有相应的资源，则会返回异常。
-
-        **说明：** 使用UDF访问资源，在创建UDF时需要声明引用的资源，否则会报错。
-
+    -   `resource_name`支持STRING类型，对应当前Project中已存在的资源表名。如果资源名非法或者没有相应的资源，会返回异常。
+    -   `mode`支持STRING类型，默认值为`'t'`。当`mode`为`'t'`时以文本格式打开文件，当`mode`为`'b'`时以二进制格式打开文件。
     -   返回值为File-like对象。在使用完此对象后，您需要调用`close`方法释放打开的资源文件。
     示例如下。
 
