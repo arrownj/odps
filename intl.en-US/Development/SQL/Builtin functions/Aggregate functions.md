@@ -4,7 +4,7 @@ keyword: aggregate function
 
 # Aggregate functions
 
-Aggregate functions group multiple input records together to form a single output record. The input and output records have a many-to-one relationship. Aggregate functions can be used together with the GROUP BY clause of SQL. This topic describes the syntax, functionality, parameters, and return value of each aggregate function that MaxCompute supports. This topic also provides examples that show how to use these aggregate functions.
+Aggregate functions group multiple input records together to form a single output record. The input and output records have a many-to-one relationship. Aggregate functions can be used together with the GROUP BY clause of SQL. This topic describes the syntax, features, parameters, and return value of each aggregate function that MaxCompute supports. This topic also provides examples that show how to use these aggregate functions.
 
 ## COUNT
 
@@ -20,7 +20,7 @@ Aggregate functions group multiple input records together to form a single outpu
 
 -   Parameters
     -   distinct\|all: specifies whether to remove duplicate records during counting. The default value is all, which indicates that all records are counted. If this parameter is set to distinct, only records with distinct values are counted.
-    -   value: the column for the function to count the number of records. The column can be of any data type. If a value in the specified column is NULL, the row that contains this value is not counted. You can set value to an asterisk \(`*`\). This means that you can run `count(*)` to count all records.
+    -   value: the column for the function to count the number of records. The column can be of any data type. If a value in the specified column is NULL, the row that contains this value is not included in the calculation. You can set value to an asterisk \(`*`\). This means that you can run `count(*)` to count all records.
 -   Return value
 
     This function returns a value of the BIGINT type.
@@ -66,7 +66,7 @@ Aggregate functions group multiple input records together to form a single outpu
     +-----+-------+
     | b | 2 |
     +-----+-------+
-    -- The COUNT function separately counts the number of records with the same key. The usage of the following aggregate functions is similar to that of the COUNT function, and therefore is not described in detail in this topic.
+    -- The COUNT function aggregates values that have the same key. The usage of the following aggregate functions is similar to that of the COUNT function, and therefore is not described in detail in this topic.
     ```
 
 
@@ -85,7 +85,7 @@ Aggregate functions group multiple input records together to form a single outpu
 
 -   Parameters
 
-    value: the column whose average value is to be calculated. The column must be of the DOUBLE or DECIMAL type. If the specified column is of the STRING or BIGINT type, the values in the column are implicitly converted to those of the DOUBLE type before calculation. If the specified column is of another data type, an error is returned. If a value in the specified column is NULL, the value is not included in the calculation. Values of the BOOLEAN type are not included in the calculation.
+    value: the column whose average value you want to calculate. The column must be of the DOUBLE or DECIMAL type. If the specified column is of the STRING or BIGINT type, the values in the column are implicitly converted to those of the DOUBLE type before calculation. If the specified column is of another data type, an error is returned. If a value in the specified column is NULL, the row that contains this value is not included in the calculation. The values of the BOOLEAN type are not included in the calculation.
 
 -   Return value
 
@@ -126,7 +126,7 @@ Aggregate functions group multiple input records together to form a single outpu
 
 -   Parameters
 
-    value: the column whose maximum value is to be calculated. The column can be of any data type. If a value in the specified column is NULL, the value is not included in the calculation. Values of the BOOLEAN type are not included in the calculation.
+    value: the column whose maximum value you want to calculate. The column can be of any data type. If a value in the specified column is NULL, the row that contains this value is not included in the calculation. The values of the BOOLEAN type are not included in the calculation.
 
 -   Return value
 
@@ -163,7 +163,7 @@ Aggregate functions group multiple input records together to form a single outpu
 
 -   Parameters
 
-    value: the column whose minimum value is to be calculated. The column can be of any data type. If a value in the specified column is NULL, the value is not included in the calculation. Values of the BOOLEAN type are not included in the calculation.
+    value: the column whose minimum value you want to calculate. The column can be of any data type. If a value in the specified column is NULL, the row that contains this value is not included in the calculation. The values of the BOOLEAN type are not included in the calculation.
 
 -   Examples
 
@@ -197,7 +197,7 @@ Aggregate functions group multiple input records together to form a single outpu
 
 -   Parameters
 
-    value: the column whose median value is to be calculated. The column must be of the DOUBLE or DECIMAL type. If the specified column is of the STRING or BIGINT type, the values in the column are implicitly converted to those of the DOUBLE type before calculation. If the specified column is of another data type, an error is returned.
+    value: the column whose median value you want to calculate. The column must be of the DOUBLE or DECIMAL type. If the specified column is of the STRING or BIGINT type, the values in the column are implicitly converted to those of the DOUBLE type before calculation. If the specified column is of another data type, an error is returned.
 
 -   Return value
 
@@ -239,7 +239,7 @@ Aggregate functions group multiple input records together to form a single outpu
 
 -   Parameters
 
-    value: the column whose population standard deviation is to be calculated. The column must be of the DOUBLE or DECIMAL type. If the specified column is of the STRING or BIGINT type, the values in the column are implicitly converted to those of the DOUBLE type before calculation. If the specified column is of another data type, an error is returned.
+    value: the column whose population standard deviation you want to calculate. The column must be of the DOUBLE or DECIMAL type. If the specified column is of the STRING or BIGINT type, the values in the column are implicitly converted to those of the DOUBLE type before calculation. If the specified column is of another data type, an error is returned.
 
 -   Return value
 
@@ -281,7 +281,7 @@ Aggregate functions group multiple input records together to form a single outpu
 
 -   Parameters
 
-    value: the column whose sample standard deviation is to be calculated. The column must be of the DOUBLE or DECIMAL type. If the specified column is of the STRING or BIGINT type, the values in the column are implicitly converted to those of the DOUBLE type before calculation. If the specified column is of another data type, an error is returned.
+    value: the column whose sample standard deviation you want to calculate. The column must be of the DOUBLE or DECIMAL type. If the specified column is of the STRING or BIGINT type, the values in the column are implicitly converted to those of the DOUBLE type before calculation. If the specified column is of another data type, an error is returned.
 
 -   Return value
 
@@ -322,11 +322,11 @@ Aggregate functions group multiple input records together to form a single outpu
 
 -   Parameters
 
-    value: the column whose sum is to be calculated. The column must be of the DOUBLE, DECIMAL, or BIGINT type. If the specified column is of the STRING type, the values in the column are implicitly converted to those of the DOUBLE type before calculation. If a value in the specified column is NULL, the value is not included in the calculation. Values of the BOOLEAN type are not included in the calculation.
+    value: the column whose sum you want to calculate. The column must be of the DOUBLE, DECIMAL, or BIGINT type. If the specified column is of the STRING type, the values in the column are implicitly converted to those of the DOUBLE type before calculation. If a value in the specified column is NULL, the row that contains this value is not included in the calculation. The values of the BOOLEAN type are not included in the calculation.
 
 -   Return value
 
-    If the specified column is of the BIGINT type, this function returns a value of the BIGINT type. If the specified column is of the DOUBLE or STRING type, this function returns a value of the DOUBLE type. If the specified column is of the DECIMAL type, the function returns a value of the DECIMAL type.
+    If the specified column is of the BIGINT type, this function returns a value of the BIGINT type. If the specified column is of the DOUBLE or STRING type, this function returns a value of the DOUBLE type.
 
 -   Examples
 
@@ -359,19 +359,21 @@ Aggregate functions group multiple input records together to form a single outpu
 
 -   Parameters
     -   separator: the delimiter, which is a constant of the STRING type. If you specify a constant of another type or a non-constant, an error is returned.
-    -   str: the values to be connected, which must be of the STRING type. If the specified values are of the BIGINT, DOUBLE, or DATETIME type, they are implicitly converted to those of the STRING type before connection. If other types of values are specified, an error is returned.
+    -   str: the values you want to connect, which must be of the STRING type. If the specified values are of the BIGINT, DOUBLE, or DATETIME type, they are implicitly converted to those of the STRING type before calculation. If other types of values are specified, an error is returned.
 -   Return value
 
     This function returns a value of the STRING type.
 
     **Note:** If `test_src` in the `SELECT WM_CONCAT(',', name) FROM test_src;` statement is an empty set, NULL is returned.
 
--   Examples: Connect values after grouping and sorting.
+-   Examples:
+
+    Connect values after data grouping and sorting.
 
     ```
     -- Create a table named test.
     CREATE TABLE test(id int , alphabet string);
-    -- Insert data to the test table.
+    -- Insert data into the test table.
     INSERT INTO test VALUES (1,'a'),(1,'b'),(1,'c'),(2,'D'),(2,'E'),(2,'F');
     -- Group and sort values in the table based on the id column. Then, connect values in the same group.
     SELECT id,WM_CONCAT('',alphabet) FROM test GROUP BY id ORDER BY id LIMIT 100;
@@ -407,14 +409,14 @@ Aggregate functions group multiple input records together to form a single outpu
 
 **Note:** If you need to use new data types, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, and BINARY, in MaxCompute SQL, you must enable the new data types.
 
--   Session level: To enable new data types at the session level, you must insert `set odps.sql.type.system.odps2=true;` before the corresponding SQL statement and execute them together.
+-   Session level: To enable new data types at the session level, you must insert `set odps.sql.type.system.odps2=true;` before the SQL statement. Then, commit and execute them together.
 -   Project level: The owner of a project can enable new data types for the project by running the following command:
 
     ```
     setproject odps.sql.type.system.odps2=true;
     ```
 
-    For more information about `SETPROJECT`, see [Project operations](/intl.en-US/Development/Common commands/Project operations.md). For more information about how to enable data types at the project level, see [Date types](/intl.en-US/Development/Data types/Data type editions.md).
+    For more information about `setproject`, see [Project operations](/intl.en-US/Development/Common commands/Project operations.md). For the precautions you must take when you enable data types at the project level, see [Date types](/intl.en-US/Development/Data types/Data type editions.md).
 
 
 ## COLLECT\_SET
@@ -440,14 +442,14 @@ Aggregate functions group multiple input records together to form a single outpu
 
 **Note:** If you need to use new data types, such as TINYINT, SMALLINT, INT, FLOAT, VARCHAR, TIMESTAMP, and BINARY, in MaxCompute SQL, you must enable the new data types.
 
--   Session level: To enable new data types at the session level, you must insert `set odps.sql.type.system.odps2=true;` before the corresponding SQL statement and execute them together.
+-   Session level: To enable new data types at the session level, you must insert `set odps.sql.type.system.odps2=true;` before the SQL statement. Then, commit and execute them together.
 -   Project level: The owner of a project can enable new data types for the project by running the following command:
 
     ```
     setproject odps.sql.type.system.odps2=true;
     ```
 
-    For more information about `SETPROJECT`, see [Project operations](/intl.en-US/Development/Common commands/Project operations.md). For more information about how to enable data types at the project level, see [Date types](/intl.en-US/Development/Data types/Data type editions.md).
+    For more information about `setproject`, see [Project operations](/intl.en-US/Development/Common commands/Project operations.md). For the precautions you must take when you enable data types at the project level, see [Date types](/intl.en-US/Development/Data types/Data type editions.md).
 
 
 ## NUMERIC\_HISTOGRAM
@@ -463,11 +465,11 @@ Aggregate functions group multiple input records together to form a single outpu
     This function returns the approximate histogram of a specific column.
 
 -   Parameters
-    -   buckets: the number of buckets for grouping values in the column whose approximate histogram is to be returned. The value must be of the BIGINT type.
-    -   value: the column whose approximate histogram is to be returned. The column must be of the DOUBLE type.
+    -   buckets: the maximum number of buckets in the column whose approximate histogram is returned. The value must be of the BIGINT type.
+    -   value: the column whose approximate histogram you want to obtain. The column must be of the DOUBLE type.
 -   Return value
 
-    This function returns a value of the `MAP<DOUBLE,DOUBLE>` type. In the return value, a key indicates an x coordinate, and its value indicates the height on the approximate histogram of the column.
+    This function returns a value of the `MAP<DOUBLE,DOUBLE>` type. In the return value, a key indicates an x-coordinate, and its value indicates the height on the approximate histogram of the column.
 
 
 ## PERCENTILE\_APPROX
@@ -481,14 +483,14 @@ Aggregate functions group multiple input records together to form a single outpu
 
 -   Description
 
-    This function returns the approximate percentile value of column col at the percentage that is specified by p.
+    This function calculates an approximate percentile value and applies to the scenarios where large amounts of data are calculated. This function returns the approximate percentile value of the col column at the given percentage p. PERCENTILE\_APPROX labels the data entries in a column from 1. For example, if a column contains the data entries of 100, 200, and 300, the sequence numbers of the entries are 1, 2, and 3. If you calculate the 0.5th percentile value of the column, the PERCENTILE\_APPROX function returns 150, which corresponds to 1.5 \(3 × 0.5\) between sequence numbers of 1 and 2.
 
 -   Parameters
-    -   p: the percentage that must range from 0.0 to 1.0. You can specify whether to return an approximate percentile value or an array that consists of multiple percentile values.
-    -   B: the accuracy of the return value. A higher accuracy indicates a more accurate value. The default value is 10000. If the number of distinct values in column col is less than B, the exact percentile value is returned.
+    -   p: the given percentage that ranges from 0.0 to 1.0. You can specify one percentage to return an approximate percentile value or multiple percentages to return an array that consists of percentile values.
+    -   B: the accuracy of the return value. A higher accuracy indicates a more accurate value. If you do not specify this parameter, 10000 is used. If the number of values in column col is less than B, the exact percentile value is returned.
 -   Return value
 
-    `percentile_approx(double col, p [, B]))` returns an approximate percentile value. `percentile_approx(double col, array(p1 [, p2]...) [, B])` returns an array that consists of multiple percentile values.
+    `percentile_approx(double col, p [, B]))` returns a single approximate percentile value. `percentile_approx(double col, array(p1 [, p2]...)[, B])` returns an array that consists of multiple percentile values.
 
 -   Examples
 
@@ -530,7 +532,7 @@ Aggregate functions group multiple input records together to form a single outpu
         (3, NULL) 
     AS t(key,value) 
     GROUP BY key;
-    -- Output
+    -- The following result is returned:
     +------------+------------+
     | key        | _c1        |
     +------------+------------+
@@ -555,11 +557,11 @@ Aggregate functions group multiple input records together to form a single outpu
 
 -   Parameters
 
-    value: the column from which a single non-deterministic value is to be returned. The column can be of any data type. If a value in the specified column is NULL, the value is ignored.
+    value: the column from which a single non-deterministic value you want to return. The value of this parameter can be of any data type. If a value in the specified column is NULL, the row that contains this value is not included in the calculation.
 
 -   Return value
 
-    This function returns a value of the same type as the input values.
+    This function returns a value of the same type as the input value.
 
 -   Examples
 
@@ -573,7 +575,7 @@ Aggregate functions group multiple input records together to form a single outpu
         (3, NULL) 
     AS t(key, value) 
     GROUP BY key;
-    -- Output
+    -- The following result is returned:
     +------------+------------+
     | key        | _c1        |
     +------------+------------+
@@ -594,11 +596,11 @@ Aggregate functions group multiple input records together to form a single outpu
 
 -   Description
 
-    This function finds the row where the maximum value of valueToMaximize resides and then returns the value of valueToReturn in the row.
+    This function finds the row where the maximum value of valueToMaximize resides and returns the value of valueToReturn in the row.
 
 -   Parameters
-    -   valueToMaximize: the column that contains the values to compare.
-    -   valueToReturn: the column that contains the value to return.
+    -   valueToMaximize: the column that contains the values to compare. The value of this parameter can be of any data type.
+    -   valueToReturn: the column that contains the value to return. The value of this parameter can be of any data type.
 -   Return value
 
     This function returns a value of the same type as valueToReturn.
@@ -616,7 +618,7 @@ Aggregate functions group multiple input records together to form a single outpu
     AS t(key,comp, value) 
     GROUP BY key;
     
-    -- Output
+    -- The following result is returned:
     +------------+------------+
     | key        | _c1        |
     +------------+------------+
@@ -637,11 +639,11 @@ Aggregate functions group multiple input records together to form a single outpu
 
 -   Description
 
-    This function finds the row where the minimum value of valueToMinimize resides and then returns the value of valueToReturn in the row.
+    This function finds the row where the minimum value of valueToMinimize resides and returns the value of valueToReturn in the row.
 
 -   Parameters
-    -   valueToMinimize: the column that contains the values to compare.
-    -   valueToReturn: the column that contains the value to return.
+    -   valueToMinimize: the column that contains the values to compare. The value of this parameter can be of any data type.
+    -   valueToReturn: the column that contains the value to return. The value of this parameter can be of any data type.
 -   Return value
 
     This function returns a value of the same type as valueToReturn.
@@ -659,7 +661,7 @@ Aggregate functions group multiple input records together to form a single outpu
     AS t(key,comp, value) 
     GROUP BY key;
     
-    -- Output
+    -- The following result is returned:
     +------------+------------+
     | key        | _c1        |
     +------------+------------+
