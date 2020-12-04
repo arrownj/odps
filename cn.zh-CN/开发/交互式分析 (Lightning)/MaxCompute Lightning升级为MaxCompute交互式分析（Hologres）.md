@@ -8,7 +8,7 @@ MaxCompute Lightning正式升级为MaxCompute交互式分析（Hologres）产品
 
 ## 开通方式
 
-Hologes于2020年11月20日最新推出共享集群，提供无服务器计算（Serverless）的服务方式，消除了资源扩展和弹性方面的限制，让您能够直接对MaxCompute数据仓库中的离线数据运行SQL查询进行实时BI分析，只需按扫描的字节数付费。
+Hologres于2020年11月20日最新推出共享集群，提供无服务器计算（Serverless）的服务方式，消除了资源扩展和弹性方面的限制，让您能够直接对MaxCompute数据仓库中的离线数据运行SQL查询进行实时BI分析，只需按扫描的字节数付费。
 
 Hologres共享集群正在火热公测中，欢迎体验试用，您可以单击[Hologres共享集群（MaxCompute BI加速版）](https://common-buy.aliyun.com/?commodityCode=hologram_maxcomputeAccelerate_public_cn&regionId=cn-hangzhou)开通。
 
