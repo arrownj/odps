@@ -69,6 +69,8 @@ set odps.sql.executionengine.coldata.deep.buffer.size.max=1048576;
 set odps.task.quota.preference.tag = tag_name;
         ```
 
+**说明：** 该属性当前仅支持SQL作业。
+
 |tag\_name为MaxCompute管家中配额组的**标签**。配额组只能取作业所属项目空间Owner所在区域的配额组。tag\_name只允许使用字母、数字和下划线（\_）。|
 
 -   使用示例
