@@ -262,6 +262,8 @@ SELECT region, total_price FROM sale_detail GROUP BY region, total_price;
 
 `LIMIT number`中的`number`是常数，限制输出行数。
 
+**说明：** `LIMIT`基于分布式系统对数据进行扫描后过滤，您无法通过`LIMIT`减少返回数据量进而减少计算费用。
+
 **解除`ORDER BY`必须带`LIMIT`的限制**
 
 因为`ORDER BY`需要对单个执行节点做全局排序，所以默认带`LIMIT`限制，避免误用导致单点处理大量数据。如果您的使用场景确实需要`ORDER BY`放开`LIMIT`限制，可以通过如下两种方式实现：
