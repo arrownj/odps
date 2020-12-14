@@ -8,7 +8,7 @@ keyword: [GROUPING SETS, 结果分组]
 
 MaxCompute中的`GROUPING SETS`是对`SELECT`语句中`GROUP BY`子句的扩展，允许您采用多种方式对结果分组，而不必使用多个`SELECT`语句来实现这一目的。这样能够使MaxCompute的引擎给出更有效的执行计划，从而提高执行性能。
 
-**说明：** 本文中大部分示例采用MaxCompute Studio进行展示，建议您[安装MaxCompute Studio](/intl.zh-CN/工具及下载/MaxCompute Studio/工具安装与版本信息/IntelliJ IDEA安装步骤.md)后，再进行后续操作。
+**说明：** 本文中大部分示例采用MaxCompute Studio进行展示，建议您[安装MaxCompute Studio](/intl.zh-CN/工具及下载/MaxCompute Studio/工具安装与版本信息/安装IntelliJ IDEA.md)后，再进行后续操作。
 
 ## 实现示例
 
@@ -166,18 +166,18 @@ GROUP BY os, device, city GROUPING SETS((os, device), (city), ());
 
 返回结果如下。
 
-![返回结果](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/1782659951/p98799.png)
+![返回结果](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/zh-CN/1782659951/p98799.png)
 
 MaxCompute还提供了无参数的GROUPING\_\_ID函数，用于兼容Hive查询。
 
 ```
 SELECT     
-a,b,c ,COUNT(*),GROUPING_ID
+a,b,c ,COUNT(*),GROUPING__ID
 FROM VALUES (1,2,3) as t(a,b,c)
 GROUP BY a, b, c GROUPING SETS ((a,b,c), (a));
 ```
 
-GROUPING\_ID既无输入参数，也无括号。此表达方式在MaxCompute种等价于GROUPING\_ID\(a,b,c\)，参数与GROUP BY的顺序一致。
+GROUPING\_\_ID既无输入参数，也无括号。此表达方式在MaxCompute种等价于GROUPING\_ID\(a,b,c\)，参数与GROUP BY的顺序一致。
 
 MaxCompute和Hive 2.3.0及以上版本兼容该函数，在Hive 2.3.0以下版本中该函数输出不一致，因此并不推荐您使用此函数。
 
