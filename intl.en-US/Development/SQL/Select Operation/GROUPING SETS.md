@@ -166,18 +166,18 @@ GROUP BY os, device, city GROUPING SETS((os, device), (city), ());
 
 The following figure shows the returned result.
 
-![Returned result](https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/en-US/0209824061/p98799.png)
+![Returned result](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/en-US/0209824061/p98799.png)
 
-MaxCompute also provides a parameterless function named GROUPING\_ID for Hive queries.
+MaxCompute also provides a parameterless function named GROUPING\_\_ID for Hive queries.
 
 ```
 SELECT     
-a,b,c ,COUNT(*),GROUPING_ID
+a,b,c ,COUNT(*),GROUPING__ID
 FROM VALUES (1,2,3) as t(a,b,c)
 GROUP BY a, b, c GROUPING SETS ((a,b,c), (a));
 ```
 
-GROUPING\_ID does not contain input parameters and parentheses \(\(\)\). GROUPING\_ID is equivalent to GROUPING\_ID\(a,b,c\) in MaxCompute. The order of the parameters in this function is the same as that in GROUP BY.
+GROUPING\_\_ID does not contain input parameters and parentheses \(\(\)\). GROUPING\_ID is equivalent to GROUPING\_ID\(a,b,c\) in MaxCompute. The order of the parameters in this function is the same as that in GROUP BY.
 
 We recommend that you use this function for Hive 2.3.0 and later.
 
