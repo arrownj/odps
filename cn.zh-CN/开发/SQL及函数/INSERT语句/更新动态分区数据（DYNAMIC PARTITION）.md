@@ -63,7 +63,7 @@ insert {into|overwrite} table <table_name> partition (<ptcol_name>[, <ptcol_name
     --创建目标表total_revenues。
     create table total_revenues (revenue double) partitioned by (region string);
     
-    --将源表sale_detail中的数据插入到目标表total_revenues。源表信息请参见[更新表或静态分区数据（INSERT INTO \| INSERT OVERWRITE）]()。
+    --将源表sale_detail中的数据插入到目标表total_revenues。源表信息请参见[更新表或静态分区数据（INSERT INTO \| INSERT OVERWRITE）](/cn.zh-CN/开发/SQL及函数/INSERT语句/更新表或静态分区数据（INSERT INTO | INSERT OVERWRITE）.md)。
     insert overwrite table total_revenues partition(region)
     select total_price as revenue, region from sale_detail;
     
